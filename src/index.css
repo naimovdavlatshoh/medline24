@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-back {
+    background: url(./assets/images/background.jpg);
+    background-size: cover;
+    color: #e4eff7;
+}
+
+/* index.css or global styles */
+:root {
+    --bg-color: theme("colors.primary-light");
+    --text-color: theme("colors.secondary-dark");
+}
+
+.dark {
+    --bg-color: theme("colors.primary-dark");
+    --text-color: theme("colors.secondary-light");
+}
