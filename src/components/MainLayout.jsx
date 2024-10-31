@@ -5,17 +5,19 @@ import Navbar from "./Navbar";
 
 const MainLayout = () => {
     return (
-        <div className="flex h-screen p-3 gap-3 bg-theme-bg text-theme-text">
+        <div className="flex h-[130vh]  text-theme-text bg-secondary-light">
             {/* Sidebar (Static) */}
             <Sidebar />
 
             {/* Main Content Area */}
-            <div className="flex flex-col flex-grow gap-3">
+            <div className="flex flex-col flex-grow  h-[120px]">
                 {/* Navbar (Top of Children Component) */}
-                <Navbar />
+                <div className="h-[10vh]">
+                    <Navbar />
+                </div>
 
                 {/* Dynamic Content Area */}
-                <div className="flex-grow  theme-bg theme-text">
+                <div className=" theme-text min-h-[120vh] p-10">
                     <Outlet /> {/* This will render the dynamic content */}
                 </div>
             </div>

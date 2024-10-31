@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 
 export const BASE_URL = "https://medline.argon.uz/";
 // export const BASE_URL_IMG = "https://api.mineplugins.com";

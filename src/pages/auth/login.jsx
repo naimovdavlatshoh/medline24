@@ -6,18 +6,23 @@ import { PostData } from "../../services";
 import { Button } from "@material-tailwind/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [passwordstatus, setPasswordstatus] = useState(true);
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
-    const SignIn = () => {
+    const navigate = useNavigate();
+    const SignIn = async () => {
         const data = {
-            username: "admin",
-            password: "admin",
+            login: login,
+            password: password,
         };
         PostData("login", data)
-            .then((res) => console.log(res))
+            .then((res) => localStorage.setItem("token", res.data.jwt))
+            .then(() => {
+                navigate("/"), window.location.reload();
+            })
             .catch((err) => {
                 const myObj = err.response.data;
                 toast.error(myObj[Object.keys(myObj)[0]]);
@@ -84,7 +89,7 @@ const Login = () => {
                                 : true
                         }
                         onClick={SignIn}
-                        className="bg-blue-600 text-white w-full py-2 rounded-md"
+                        className="bg-blue-600 text-white w-full py-3 rounded-md"
                     >
                         войти
                     </Button>

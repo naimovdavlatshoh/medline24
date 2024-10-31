@@ -32,12 +32,24 @@ import {
     PostDataTokenJson,
 } from "../../services";
 import Pagination from "../../components/Pagination";
-import { Add } from "../../utils/constants";
+import AddAction from "./AddAction";
 
-const TABLE_HEAD = ["N", "Роль", "Отдел", "Действия"];
-const TABLE_HEADUZ = ["N", "Rol", "Bo'lim", "Amal"];
+const TABLE_HEADRU = [
+    "N",
+    "Название",
+    "время начала",
+    "время окончания",
+    "Действия",
+];
+const TABLE_HEADUZ = [
+    "N",
+    "Aksiya",
+    "Boshlanish vaqti",
+    "Tugash vaqti",
+    "Amal",
+];
 
-const Division = () => {
+const Action = () => {
     const [open, setOpen] = useState(false);
     const [size, setSize] = useState(null);
     const [size1, setSize1] = useState(null);
@@ -47,15 +59,26 @@ const Division = () => {
     };
     const [roles, setRoles] = useState([]);
     const [role, setRole] = useState(null);
+    const [parts, setParts] = useState([]);
+    const [part, setPart] = useState(null);
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [fatherName, setFathername] = useState("");
+    const [cabine, setCabine] = useState(null);
+    const [login, setLogin] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [users, setUsers] = useState([]);
+    const [deletedId, setDeletedId] = useState(null);
+    const [updateId, setUpdateId] = useState(null);
     const [status, setStatus] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [search, setSearch] = useState("");
-    const [department_name_ru, setDepartment_name_ru] = useState("");
-    const [department_name_uz, setDepartment_name_uz] = useState("");
+    const [searchData, setSearchData] = useState([]);
     const [language, setLanguage] = useState("ru");
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [comment, setComment] = useState("");
 
     useEffect(() => {
         const lang = localStorage.getItem("lang");
@@ -65,61 +88,97 @@ const Division = () => {
     }, [language]);
 
     useEffect(() => {
-        GetDataSimple("api/department/roles/list").then((res) => setRoles(res));
-    }, []);
-
-    useEffect(() => {
-        GetDataSimple("api/department/list?page=1&limit=10").then((res) => {
-            setUsers(res?.result);
-            setTotalPages(res?.pages);
-        });
+        GetDataSimple(`api/aksiya/list?page=${currentPage}&limit=10`).then(
+            (res) => {
+                setUsers(res?.result);
+                setTotalPages(res?.pages);
+            }
+        );
     }, [status, currentPage]);
-
-    console.log(currentUser);
 
     const AddUser = (e) => {
         e.preventDefault();
         const data = {
-            role_id: role.role_id,
-            department_name_ru: department_name_ru,
-            department_name_uz: department_name_uz,
+            firstname: firstname,
+            lastname: lastname,
+            fathername: fatherName,
+            login: login,
+            password: password,
+            role_id: parseInt(role.role_id),
+            dept_id: parseInt(part),
         };
-
-        PostDataTokenJson("api/department/create", data).then(() =>
-            handleOpen(null)
-        ),
-            setStatus(!status).catch(() => {
+        console.log(role, part);
+        PostDataTokenJson("/api/user/create", data)
+            .then(() => handleOpen(null))
+            .catch(() => {
                 handleOpen(null), setStatus(!status);
             });
     };
-    const UpdateUser = (e) => {
-        e.preventDefault();
-        const data = {
-            role_id: currentUser?.role_id,
-            department_name_ru: currentUser?.department_name_ru,
-            department_name_uz: currentUser?.department_name_uz,
-        };
 
-        PostDataTokenJson(`api/department/update/${currentUser?.dept_id}`, data)
-            .then(() => handleOpen1(null))
-            .catch(() => {
-                handleOpen1(null), setStatus(!status);
-            });
+    const DeleteFinish = () => {
+        const data = {
+            comments: comment,
+        };
+        DeleteData(`api/aksiya/delete/${deletedId}`, {
+            comments: "salom",
+        }).then(() => {
+            setOpen(!open);
+            setStatus(!status);
+        });
+    };
+
+    const deleteData = (id) => {
+        setOpen(!open);
+        setDeletedId(id);
     };
 
     return (
         <div>
+            <Dialog open={open} handler={handleOpen}>
+                <DialogHeader>
+                    {language == "ru"
+                        ? "Вы уверены, что хотите удалить?"
+                        : "Siz anniq buni o'chirmoqchimisiz?"}
+                </DialogHeader>
+                <DialogBody>
+                    <Typography className="mb-5">
+                        Добавить комментарий
+                    </Typography>
+                    <Input
+                        onChange={(e) => setComment(e.target.value)}
+                        label="комментарий"
+                    />
+                </DialogBody>
+                <DialogFooter>
+                    <Button
+                        variant="text"
+                        color="red"
+                        onClick={() => setOpen(false)}
+                        className="mr-1"
+                    >
+                        <span>{language == "ru" ? "нет" : "yo'q"}</span>
+                    </Button>
+                    <Button
+                        variant="gradient"
+                        color="green"
+                        onClick={DeleteFinish}
+                    >
+                        <span>{language == "ru" ? "да" : "ha"}</span>
+                    </Button>
+                </DialogFooter>
+            </Dialog>
+
             <>
                 <Dialog
                     className="bg-theme-bg text-theme-text"
-                    open={size === "md"}
+                    open={size === "xl"}
                     size={size || "md"}
                     handler={handleOpen}
                 >
                     <DialogHeader>
                         {language == "ru"
-                            ? "Добавить Отдел"
-                            : "Bo'lim qo'shish"}
+                            ? "Добавить пользователя"
+                            : "Yangi foydalanuvchi qo'shish"}
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
@@ -130,7 +189,7 @@ const Division = () => {
                                         label={
                                             language == "ru"
                                                 ? "Выбирите роль:"
-                                                : "Rol tanlang:"
+                                                : "Rol Tanlang:"
                                         }
                                         value={
                                             language == "ru"
@@ -138,33 +197,95 @@ const Division = () => {
                                                 : role?.role_name_uz
                                         }
                                     >
-                                        {roles?.map((item) => (
+                                        {roles?.map((item, index) => (
+                                            <div>
+                                                <p className="font-bold mb-3">
+                                                    {language == "ru"
+                                                        ? item?.role_name_ru
+                                                        : item?.role_name_uz}
+                                                </p>
+                                                {roles[index]?.child?.map(
+                                                    (i) => (
+                                                        <Option
+                                                            onClick={() => {
+                                                                setRole(i);
+                                                            }}
+                                                            className="text-theme-text bg-theme-bg mb-2"
+                                                        >
+                                                            {language == "ru"
+                                                                ? i.role_name_ru
+                                                                : i.role_name_uz}
+                                                        </Option>
+                                                    )
+                                                )}
+                                            </div>
+                                        ))}
+                                    </Select>
+                                    <Select
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Отдел:"
+                                                : "Bo'lim:"
+                                        }
+                                        disabled={role?.role_id !== "7"}
+                                    >
+                                        {parts.map((item, index) => (
                                             <Option
-                                                onClick={() => {
-                                                    setRole(item);
-                                                }}
+                                                onClick={() =>
+                                                    setPart(item?.role_id)
+                                                }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
                                                 {language == "ru"
-                                                    ? item?.role_name_ru
-                                                    : item?.role_name_uz}
+                                                    ? item?.department_name_ru
+                                                    : item?.department_name_uz}
                                             </Option>
                                         ))}
                                     </Select>
+                                    <Input
+                                        onChange={(e) =>
+                                            setFirstname(e.target.value)
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Фамилия пользователя:"
+                                                : "Foydalanuvchining familyasi"
+                                        }
+                                    />
                                 </div>
 
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
+                                        onChange={(e) =>
+                                            setLogin(e.target.value)
+                                        }
                                         color="blue"
                                         label={
                                             language == "ru"
-                                                ? "Название отдела (uz)"
-                                                : "Bo'lim nomi (uz)"
+                                                ? "Логин:"
+                                                : "Login"
                                         }
+                                    />
+                                    <Input
                                         onChange={(e) =>
-                                            setDepartment_name_uz(
-                                                e.target.value
-                                            )
+                                            setPassword(e.target.value)
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru" ? "Пароль:" : "Kod"
+                                        }
+                                    />
+                                    <Input
+                                        onChange={(e) =>
+                                            setConfirmPassword(e.target.value)
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Повторите пароль:"
+                                                : "Kodni qaytaring"
                                         }
                                     />
                                 </div>
@@ -172,14 +293,23 @@ const Division = () => {
                                     <Input
                                         color="blue"
                                         onChange={(e) =>
-                                            setDepartment_name_ru(
-                                                e.target.value
-                                            )
+                                            setLastname(e.target.value)
                                         }
                                         label={
                                             language == "ru"
-                                                ? "Название отдела (ru)"
-                                                : "Bo'lim nomi (ru)"
+                                                ? "Имя пользователя:"
+                                                : "Foydalanuvchining ismi"
+                                        }
+                                    />
+                                    <Input
+                                        color="blue"
+                                        onChange={(e) =>
+                                            setFathername(e.target.value)
+                                        }
+                                        label={
+                                            language == "ru"
+                                                ? "Отчество пользователя:"
+                                                : "Foydalanuvchinig sharifi"
                                         }
                                     />
                                 </div>
@@ -194,8 +324,8 @@ const Division = () => {
                                 >
                                     <span>
                                         {language == "ru"
-                                            ? Add.rufalse
-                                            : Add.uzfalse}
+                                            ? "закрыть"
+                                            : "Yopish"}
                                     </span>
                                 </Button>
                                 <Button
@@ -204,133 +334,9 @@ const Division = () => {
                                     type="submit"
                                 >
                                     <span>
-                                        {" "}
                                         {language == "ru"
-                                            ? Add.rutrue
-                                            : Add.uztrue}
-                                    </span>
-                                </Button>
-                            </div>
-                        </form>
-                    </DialogBody>
-                </Dialog>
-            </>
-
-            <>
-                <Dialog
-                    className="bg-theme-bg text-theme-text"
-                    open={size1 === "md"}
-                    size={size1 || "md"}
-                    handler={handleOpen}
-                >
-                    <DialogHeader>
-                        {language == "ru"
-                            ? "обновить Отдел"
-                            : "bo'limni yangilash"}
-                    </DialogHeader>
-                    <DialogBody>
-                        <form onSubmit={(e) => UpdateUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Select
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Выбрать роль : " +
-                                                  currentUser?.role_name_ru
-                                                : "Rol tanlash : " +
-                                                  currentUser?.role_name_uz
-                                        }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
-                                    >
-                                        {roles?.map((item, index) => (
-                                            <Option
-                                                onClick={() => {
-                                                    setCurrentUser((prev) => ({
-                                                        ...prev,
-                                                        ["role_id"]:
-                                                            item?.role_id,
-                                                    }));
-                                                }}
-                                                className="text-theme-text bg-theme-bg mb-2"
-                                            >
-                                                {language == "ru"
-                                                    ? item.role_name_ru
-                                                    : item.role_name_uz}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </div>
-
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        defaultValue={
-                                            currentUser?.department_name_uz
-                                        }
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["department_name_uz"]:
-                                                    e.target.value,
-                                            }))
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Название отдела (uz)"
-                                                : "Bo'limning nomlanishi (uz)"
-                                        }
-                                    />
-                                </div>
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        color="blue"
-                                        defaultValue={
-                                            currentUser?.department_name_ru
-                                        }
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["department_name_ru"]:
-                                                    e.target.value,
-                                            }))
-                                        }
-                                        label={
-                                            language == "ru"
-                                                ? "Название отдела (ru)"
-                                                : "Bo'limning nomlanishi (ru)"
-                                        }
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex justify-end">
-                                <Button
-                                    type="button"
-                                    variant="text"
-                                    color="red"
-                                    onClick={() => handleOpen1(null)}
-                                    className="mr-1"
-                                >
-                                    <span>
-                                        {language == "ru"
-                                            ? Add.rufalse
-                                            : Add.uzfalse}
-                                    </span>
-                                </Button>
-                                <Button
-                                    variant="gradient"
-                                    color="blue"
-                                    type="submit"
-                                >
-                                    <span>
-                                        {" "}
-                                        {language == "ru"
-                                            ? Add.rutrue
-                                            : Add.uztrue}
+                                            ? "Добавить"
+                                            : "Qo'shish"}
                                     </span>
                                 </Button>
                             </div>
@@ -349,8 +355,8 @@ const Division = () => {
                         <div>
                             <Typography variant="h5" color="blue-gray">
                                 {language == "ru"
-                                    ? "Список Отделов"
-                                    : "Bo'limlar ro'yxati"}
+                                    ? "Список Пользователей"
+                                    : "Foydalanuvchilar ro'yxati"}
                             </Typography>
                         </div>
                         <div className="flex w-full shrink-0 gap-2 md:w-max">
@@ -365,15 +371,7 @@ const Division = () => {
                                     }
                                 />
                             </div>
-                            <Button
-                                className="flex items-center gap-3 "
-                                onClick={() => handleOpen("md")}
-                                size="sm"
-                            >
-                                {language == "ru"
-                                    ? "Добавить Отдел"
-                                    : "Bo'lim qo'shish"}
-                            </Button>
+                            <AddAction />
                         </div>
                     </div>
                 </CardHeader>
@@ -382,7 +380,7 @@ const Division = () => {
                         <thead>
                             {language == "ru" ? (
                                 <tr>
-                                    {TABLE_HEAD.map((head) => (
+                                    {TABLE_HEADRU.map((head) => (
                                         <th
                                             key={head}
                                             className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
@@ -436,8 +434,18 @@ const Division = () => {
                                             className="font-bold"
                                         >
                                             {language == "ru"
-                                                ? item?.role_name_ru
-                                                : item?.role_name_uz}
+                                                ? item?.aksiya_name_ru
+                                                : item?.aksiya_name_uz}
+                                        </Typography>
+                                    </td>
+
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {item?.start_date}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -446,9 +454,7 @@ const Division = () => {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {language == "ru"
-                                                ? item?.department_name_ru
-                                                : item?.department_name_uz}
+                                            {item?.end_date}
                                         </Typography>
                                     </td>
 
@@ -456,21 +462,22 @@ const Division = () => {
                                         <Tooltip
                                             content={
                                                 language == "ru"
-                                                    ? "обновить Отдел"
-                                                    : "bo'limni yangilash"
+                                                    ? "удалить акции"
+                                                    : "foydalanuvchini o'chirish"
                                             }
                                         >
                                             <IconButton
                                                 variant="text"
-                                                onClick={() => {
-                                                    handleOpen1("md"),
-                                                        setCurrentUser(item);
-                                                }}
+                                                onClick={() =>
+                                                    deleteData(item.aksiya_id)
+                                                }
                                             >
-                                                <PencilIcon
-                                                    className="h-4 w-4"
-                                                    color="orange"
-                                                />
+                                                {
+                                                    <TrashIcon
+                                                        className="h-4 w-4"
+                                                        color="red"
+                                                    />
+                                                }
                                             </IconButton>
                                         </Tooltip>
                                     </td>
@@ -489,4 +496,4 @@ const Division = () => {
     );
 };
 
-export default Division;
+export default Action;

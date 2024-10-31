@@ -23,7 +23,7 @@ function ThemeToggle() {
     return (
         <button
             onClick={toggleTheme}
-            className="p-4  text-gray-100  rounded-2xl flex justify-center items-center"
+            className="p-4  text-main-green  rounded-2xl flex justify-center items-center"
         >
             {theme === "light" ? (
                 <IoMoonOutline size={25} />

@@ -12,10 +12,11 @@ export default {
             colors: {
                 "primary-light": "#ffffff",
                 "primary-dark": "#000814",
-                "secondary-light": "#f9fafb",
+                "secondary-light": "#f1f3ef",
                 "secondary-dark": "#16213e",
                 "main-light": "#00a6fb",
                 "main-dark": "#003554",
+                "main-green": "#36c95f",
             },
             // Define custom utility classes
             backgroundColor: {

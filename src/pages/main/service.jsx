@@ -1,4 +1,4 @@
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import {
     ArrowDownTrayIcon,
     MagnifyingGlassIcon,
@@ -25,48 +25,177 @@ import {
     Input,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import { GetDataSimple } from "../../services";
+import {
+    DeleteData,
+    GetDataSimple,
+    PostDataToken,
+    PostDataTokenJson,
+} from "../../services";
+import Pagination from "../../components/Pagination";
+import { Add, Delete, Edit } from "../../utils/constants";
 
-const TABLE_HEAD = ["Transaction", "Amount", "Date", "Status", "Account", ""];
-
-const TABLE_ROWS = [
-    {
-        img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
-        name: "Spotify",
-        amount: "$2,500",
-        date: "Wed 3:00pm",
-        status: "paid",
-        account: "visa",
-        accountNumber: "1234",
-        expiry: "06/2026",
-    },
+const TABLE_HEAD = [
+    "N",
+    "Роль",
+    "Отдел",
+    "Название",
+    "Тип",
+    "Цена",
+    "Действия",
+];
+const TABLE_HEADUZ = [
+    "N",
+    "Rol",
+    "Bo'lim",
+    "Nomlanishi",
+    "Tur",
+    "Narx",
+    "Amal",
 ];
 
 const Service = () => {
+    const [open, setOpen] = useState(false);
     const [size, setSize] = useState(null);
+    const [size1, setSize1] = useState(null);
     const handleOpen = (value) => setSize(value);
+    const handleOpen1 = (value) => {
+        setSize1(value), setStatus(!status);
+    };
+    const [roles, setRoles] = useState([]);
     const [role, setRole] = useState(null);
+    const [types, setTypes] = useState([]);
+    const [type, setType] = useState(null);
+    const [parts, setParts] = useState([]);
     const [part, setPart] = useState(null);
-    const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [fatherName, setFathername] = useState("");
-    const [cabine, setCabine] = useState(null);
-    const [login, setLogin] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+
+    const [users, setUsers] = useState([]);
+    const [deletedId, setDeletedId] = useState(null);
+
+    const [status, setStatus] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [search, setSearch] = useState("");
+    const [searchData, setSearchData] = useState([]);
+    const [serviceru, setServiceru] = useState("");
+    const [serviceuz, setServiceuz] = useState("");
+    const [priceru, setPriceru] = useState(0);
+    const [priceuz, setPriceuz] = useState(0);
+    const [language, setLanguage] = useState("ru");
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        GetDataSimple("role/list").then((res) => console.log(res));
-        console.log("salom");
+        const lang = localStorage.getItem("lang");
+        if (lang) {
+            setLanguage(lang);
+        }
+    }, [language]);
+
+    useEffect(() => {
+        GetDataSimple("api/services/visits").then((res) => {
+            setTypes(res);
+        });
     }, []);
+
+    useEffect(() => {
+        GetDataSimple("api/department/list?page=1&limit=10").then((res) => {
+            setParts(res.result);
+        });
+    }, []);
+
+    useEffect(() => {
+        GetDataSimple("api/department/roles/list").then((res) => {
+            setRoles(res);
+        });
+    }, []);
+
+    useEffect(() => {
+        GetDataSimple("api/services/list?page=1&limit=10").then((res) => {
+            setUsers(res?.result);
+            setTotalPages(res?.pages);
+        });
+    }, [status, currentPage]);
 
     const AddUser = (e) => {
         e.preventDefault();
-        console.log("hello");
-        setSize(null);
+        const data = {
+            service_name_ru: serviceru,
+            service_name_uz: serviceuz,
+            price_for_locals: priceuz,
+            price_for_tourist: priceru,
+            role_id: role,
+            service_type: type?.visit_type_id,
+            dept_id: part,
+        };
+
+        PostDataTokenJson("api/services/create", data).then(() =>
+            handleOpen(null)
+        );
+        setStatus(!status).catch(() => {
+            handleOpen(null), setStatus(!status);
+        });
     };
+
+    console.log(currentUser);
+
+    const UpdateUser = (e) => {
+        e.preventDefault();
+        const data = {
+            firstname: currentUser?.firstname,
+            lastname: currentUser?.lastname,
+            fathername: currentUser.fathername,
+            login: currentUser?.login,
+            password: currentUser?.password,
+            role_id: currentUser?.role_id,
+        };
+
+        PostDataTokenJson(`api/user/update/${currentUser?.user_id}`, data)
+            .then(() => handleOpen1(null))
+            .catch(() => {
+                handleOpen1(null), setStatus(!status);
+            });
+    };
+
+    const DeleteFinish = () => {
+        DeleteData(`api/services/delete/${deletedId}`).then((res) => {
+            setOpen(!open);
+            setStatus(!status);
+        });
+    };
+
+    const deleteData = (id) => {
+        setOpen(!open);
+        setDeletedId(id);
+    };
+
     return (
         <div>
+            <Dialog open={open} handler={handleOpen}>
+                <DialogHeader>
+                    {language == "ru" ? Delete.titleru : Delete.titleuz}
+                </DialogHeader>
+                <DialogFooter>
+                    <Button
+                        variant="text"
+                        color="red"
+                        onClick={() => setOpen(false)}
+                        className="mr-1"
+                    >
+                        <span>
+                            {language == "ru" ? Delete.rufalse : Delete.uzfalse}
+                        </span>
+                    </Button>
+                    <Button
+                        variant="gradient"
+                        color="green"
+                        onClick={DeleteFinish}
+                    >
+                        <span>
+                            {language == "ru" ? Delete.rutrue : Delete.uztrue}
+                        </span>
+                    </Button>
+                </DialogFooter>
+            </Dialog>
+
             <>
                 <Dialog
                     className="bg-theme-bg text-theme-text"
@@ -74,84 +203,131 @@ const Service = () => {
                     size={size || "md"}
                     handler={handleOpen}
                 >
-                    <DialogHeader>Добавить пользователя</DialogHeader>
+                    <DialogHeader>
+                        {language == "ru"
+                            ? "добавить услугу"
+                            : "xizmat qo'shish"}
+                    </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
                             <div className="flex justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
-                                    <Select color="blue" label="Выбирите роль:">
-                                        <Option
-                                            onClick={() => setRole(7)}
-                                            className="text-theme-text bg-theme-bg mb-2"
-                                        >
-                                            Material Tailwind HTML
-                                        </Option>
+                                    <Select
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "выбрать роль:"
+                                                : "Rol tanlang:"
+                                        }
+                                    >
+                                        {roles.map((item) => (
+                                            <Option
+                                                onClick={() =>
+                                                    setRole(item?.role_id)
+                                                }
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {language == "ru"
+                                                    ? item?.role_name_ru
+                                                    : item?.role_name_uz}
+                                            </Option>
+                                        ))}
                                     </Select>
                                     <Select
                                         color="blue"
-                                        label="Отдел:"
-                                        disabled={role !== 7}
+                                        label={
+                                            language == "ru"
+                                                ? "выбрать отдел:"
+                                                : "bo'lim tanlang:"
+                                        }
                                     >
-                                        <Option
-                                            onClick={() => setRole()}
-                                            className="text-theme-text bg-theme-bg mb-2"
-                                        >
-                                            Material Tailwind HTML
-                                        </Option>
+                                        {parts.map((item) => (
+                                            <Option
+                                                onClick={() =>
+                                                    setPart(item?.role_id)
+                                                }
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {language == "ru"
+                                                    ? item?.department_name_ru
+                                                    : item?.department_name_uz}
+                                            </Option>
+                                        ))}
                                     </Select>
+                                    <Select
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Выбирите тип:"
+                                                : "tur tanlang:"
+                                        }
+                                        value={
+                                            language == "ru"
+                                                ? role?.role_name_ru
+                                                : role?.role_name_uz
+                                        }
+                                    >
+                                        {types?.map((item) => (
+                                            <Option
+                                                onClick={() => {
+                                                    setType(item);
+                                                }}
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {language == "ru"
+                                                    ? item.visit_name_ru
+                                                    : item.visit_name_uz}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </div>
+
+                                <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         onChange={(e) =>
-                                            setFirstname(e.target.value)
+                                            setServiceru(e.target.value)
                                         }
                                         color="blue"
-                                        label="Фамилия пользователя:"
+                                        label={
+                                            language == "ru"
+                                                ? "имя службы (ru):"
+                                                : "xizmat nomi (ru):"
+                                        }
+                                    />
+                                    <Input
+                                        onChange={(e) =>
+                                            setServiceuz(e.target.value)
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "имя службы (uz):"
+                                                : "xizmat nomi (uz):"
+                                        }
                                     />
                                 </div>
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         color="blue"
                                         onChange={(e) =>
-                                            setLastname(e.target.value)
+                                            setPriceuz(e.target.value)
                                         }
-                                        label="Имя пользователя:"
+                                        label={
+                                            language == "ru"
+                                                ? "цена за местный:"
+                                                : "mahalliy aholi uchun narx:"
+                                        }
                                     />
                                     <Input
                                         color="blue"
                                         onChange={(e) =>
-                                            setFathername(e.target.value)
+                                            setPriceru(e.target.value)
                                         }
-                                        label="Отчество пользователя:"
-                                    />
-                                    <Select color="blue" label="Кабинет:">
-                                        <Option
-                                            onClick={() => setCabine(1)}
-                                            className="text-theme-text bg-theme-bg mb-2"
-                                        >
-                                            Material Tailwind HTML
-                                        </Option>
-                                    </Select>
-                                </div>
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        onChange={(e) =>
-                                            setLogin(e.target.value)
+                                        label={
+                                            language == "ru"
+                                                ? "цена для туриста:"
+                                                : "turistlar uchun narx:"
                                         }
-                                        color="blue"
-                                        label="Логин:"
-                                    />
-                                    <Input
-                                        onChange={(e) =>
-                                            setPassword(e.target.value)
-                                        }
-                                        color="blue"
-                                        label="Пароль:"
-                                    />
-                                    <Input
-                                        onChange={(e) =>
-                                            setConfirmPassword(e.target.value)
-                                        }
-                                        color="blue"
-                                        label="Повторите пароль:"
                                     />
                                 </div>
                             </div>
@@ -163,20 +339,212 @@ const Service = () => {
                                     onClick={() => handleOpen(null)}
                                     className="mr-1"
                                 >
-                                    <span>Cancel</span>
+                                    <span>
+                                        {language == "ru"
+                                            ? Add.rufalse
+                                            : Add.uzfalse}
+                                    </span>
                                 </Button>
                                 <Button
                                     variant="gradient"
                                     color="blue"
                                     type="submit"
                                 >
-                                    <span>Добавить</span>
+                                    <span>
+                                        {" "}
+                                        {language == "ru"
+                                            ? Add.rutrue
+                                            : Add.uztrue}
+                                    </span>
                                 </Button>
                             </div>
                         </form>
                     </DialogBody>
                 </Dialog>
             </>
+
+            <>
+                <Dialog
+                    className="bg-theme-bg text-theme-text"
+                    open={size1 === "xl"}
+                    size={size1 || "md"}
+                    handler={handleOpen}
+                >
+                    <DialogHeader>
+                        {language == "ru"
+                            ? "обновить услугу"
+                            : "xizmatni yangilash"}
+                    </DialogHeader>
+                    <DialogBody>
+                        <form onSubmit={(e) => UpdateUser(e)}>
+                            <div className="flex justify-between gap-3 mb-5">
+                                <div className="w-1/3 flex flex-col gap-4">
+                                    <Select
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Выбрать роль : " +
+                                                  currentUser?.role_name_ru
+                                                : "Rol tanlash : " +
+                                                  currentUser?.role_name_uz
+                                        }
+                                        value={
+                                            language == "ru"
+                                                ? role?.role_name_ru
+                                                : role?.role_name_uz
+                                        }
+                                    >
+                                        {roles?.map((item, index) => (
+                                            <Option
+                                                onClick={() => {
+                                                    setCurrentUser((prev) => ({
+                                                        ...prev,
+                                                        ["role_id"]:
+                                                            item?.role_id,
+                                                    }));
+                                                }}
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {language == "ru"
+                                                    ? item.role_name_ru
+                                                    : item.role_name_uz}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                    {/* <Select
+                                        color="blue"
+                                        label="Отдел:"
+                                        disabled={currentUser?.role_id !== "7"}
+                                    >
+                                        {parts.map((item, index) => (
+                                            <Option
+                                                onClick={() =>
+                                                    setCurrentUser((prev) => ({
+                                                        ...prev,
+                                                        ["department"]:
+                                                            item?.department_id,
+                                                    }))
+                                                }
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {item?.department_name_ru}
+                                            </Option>
+                                        ))}
+                                    </Select> */}
+                                    <Input
+                                        onChange={(e) =>
+                                            setCurrentUser((prev) => ({
+                                                ...prev,
+                                                ["lastname"]: e.target.value,
+                                            }))
+                                        }
+                                        color="blue"
+                                        defaultValue={currentUser?.lastname}
+                                        label={
+                                            language == "ru"
+                                                ? "Фамилия пользователя:"
+                                                : "Foydalanuvchining familyasi"
+                                        }
+                                    />
+                                </div>
+
+                                <div className="w-1/3 flex flex-col gap-4">
+                                    <Input
+                                        defaultValue={currentUser?.login}
+                                        onChange={(e) =>
+                                            setCurrentUser((prev) => ({
+                                                ...prev,
+                                                ["login"]: e.target.value,
+                                            }))
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Логин:"
+                                                : "Login:"
+                                        }
+                                    />
+                                    <Input
+                                        defaultValue={currentUser?.password}
+                                        required
+                                        onChange={(e) =>
+                                            setCurrentUser((prev) => ({
+                                                ...prev,
+                                                ["password"]: e.target.value,
+                                            }))
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "Пароль:"
+                                                : "Kod:"
+                                        }
+                                    />
+                                </div>
+                                <div className="w-1/3 flex flex-col gap-4">
+                                    <Input
+                                        color="blue"
+                                        defaultValue={currentUser?.firstname}
+                                        onChange={(e) =>
+                                            setCurrentUser((prev) => ({
+                                                ...prev,
+                                                ["firstname"]: e.target.value,
+                                            }))
+                                        }
+                                        label={
+                                            language == "ru"
+                                                ? "Имя пользователя:"
+                                                : "Foydalanuvchi nomi:"
+                                        }
+                                    />
+                                    <Input
+                                        color="blue"
+                                        defaultValue={currentUser?.fathername}
+                                        onChange={(e) =>
+                                            setCurrentUser((prev) => ({
+                                                ...prev,
+                                                ["fathername"]: e.target.value,
+                                            }))
+                                        }
+                                        label={
+                                            language == "ru"
+                                                ? "Отчество пользователя:"
+                                                : "Foydalanuvchi sharifi:"
+                                        }
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex justify-end">
+                                <Button
+                                    type="button"
+                                    variant="text"
+                                    color="red"
+                                    onClick={() => handleOpen1(null)}
+                                    className="mr-1"
+                                >
+                                    <span>
+                                        {language == "ru"
+                                            ? Edit.rufalse
+                                            : Edit.uzfalse}
+                                    </span>
+                                </Button>
+                                <Button
+                                    variant="gradient"
+                                    color="blue"
+                                    type="submit"
+                                >
+                                    <span>
+                                        {language == "ru"
+                                            ? Edit.rutrue
+                                            : Edit.uztrue}
+                                    </span>
+                                </Button>
+                            </div>
+                        </form>
+                    </DialogBody>
+                </Dialog>
+            </>
+
             <Card className="h-full w-full bg-theme-bg text-theme-text">
                 <CardHeader
                     floated={false}
@@ -186,12 +554,13 @@ const Service = () => {
                     <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center bg-theme-bg text-theme-text">
                         <div>
                             <Typography variant="h5" color="blue-gray">
-                                Список Услуг
+                                Список Пользователей
                             </Typography>
                         </div>
                         <div className="flex w-full shrink-0 gap-2 md:w-max">
                             <div className="w-full md:w-72">
                                 <Input
+                                    onChange={(e) => setSearch(e.target.value)}
                                     label="поиск"
                                     icon={
                                         <MagnifyingGlassIcon className="h-5 w-5" />
@@ -211,216 +580,135 @@ const Service = () => {
                 <CardBody className="overflow-scroll px-0">
                     <table className="w-full min-w-max table-auto text-left">
                         <thead>
-                            <tr>
-                                {TABLE_HEAD.map((head) => (
-                                    <th
-                                        key={head}
-                                        className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                                    >
+                            {language == "ru" ? (
+                                <tr>
+                                    {TABLE_HEAD.map((head) => (
+                                        <th
+                                            key={head}
+                                            className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                                        >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal leading-none opacity-70"
+                                            >
+                                                {head}
+                                            </Typography>
+                                        </th>
+                                    ))}
+                                </tr>
+                            ) : (
+                                <tr>
+                                    {TABLE_HEADUZ.map((head) => (
+                                        <th
+                                            key={head}
+                                            className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                                        >
+                                            <Typography
+                                                variant="small"
+                                                color="blue-gray"
+                                                className="font-normal leading-none opacity-70"
+                                            >
+                                                {head}
+                                            </Typography>
+                                        </th>
+                                    ))}
+                                </tr>
+                            )}
+                        </thead>
+
+                        <tbody>
+                            {users.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="p-4">
                                         <Typography
                                             variant="small"
                                             color="blue-gray"
-                                            className="font-normal leading-none opacity-70"
+                                            className="font-bold"
                                         >
-                                            {head}
+                                            {index + 1}
                                         </Typography>
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {TABLE_ROWS.map(
-                                (
-                                    {
-                                        img,
-                                        name,
-                                        amount,
-                                        date,
-                                        status,
-                                        account,
-                                        accountNumber,
-                                        expiry,
-                                    },
-                                    index
-                                ) => {
-                                    const isLast =
-                                        index === TABLE_ROWS.length - 1;
-                                    const classes = isLast
-                                        ? "p-4"
-                                        : "p-4 border-b border-blue-gray-50";
+                                    </td>
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-bold"
+                                        >
+                                            {language == "ru"
+                                                ? item?.role_name_ru
+                                                : item?.role_name_uz}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {language == "ru"
+                                                ? item?.department_name_ru
+                                                : item?.department_name_uz}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-normal"
+                                        >
+                                            {language == "ru"
+                                                ? item?.service_name_ru
+                                                : item?.service_name_uz}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4">
+                                        {item?.visit_name_ru}
+                                    </td>
+                                    <td className="p-4">
+                                        {item?.price_for_locals +
+                                            "/" +
+                                            item?.price_for_tourist}
+                                    </td>
 
-                                    return (
-                                        <tr key={name}>
-                                            <td className={classes}>
-                                                <div className="flex items-center gap-3">
-                                                    <Avatar
-                                                        src={img}
-                                                        alt={name}
-                                                        size="md"
-                                                        className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
-                                                    />
-                                                    <Typography
-                                                        variant="small"
-                                                        color="blue-gray"
-                                                        className="font-bold"
-                                                    >
-                                                        {name}
-                                                    </Typography>
-                                                </div>
-                                            </td>
-                                            <td className={classes}>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {amount}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {date}
-                                                </Typography>
-                                            </td>
-                                            <td className={classes}>
-                                                <div className="w-max">
-                                                    <Chip
-                                                        size="sm"
-                                                        variant="ghost"
-                                                        value={status}
-                                                        color={
-                                                            status === "paid"
-                                                                ? "green"
-                                                                : status ===
-                                                                  "pending"
-                                                                ? "amber"
-                                                                : "red"
-                                                        }
-                                                    />
-                                                </div>
-                                            </td>
-                                            <td className={classes}>
-                                                <div className="flex items-center gap-3">
-                                                    <div className="h-9 w-12 rounded-md border border-blue-gray-50 p-1">
-                                                        <Avatar
-                                                            src={
-                                                                account ===
-                                                                "visa"
-                                                                    ? "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
-                                                                    : "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/mastercard.png"
-                                                            }
-                                                            size="sm"
-                                                            alt={account}
-                                                            variant="square"
-                                                            className="h-full w-full object-contain p-1"
-                                                        />
-                                                    </div>
-                                                    <div className="flex flex-col">
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal capitalize"
-                                                        >
-                                                            {account
-                                                                .split("-")
-                                                                .join(" ")}{" "}
-                                                            {accountNumber}
-                                                        </Typography>
-                                                        <Typography
-                                                            variant="small"
-                                                            color="blue-gray"
-                                                            className="font-normal opacity-70"
-                                                        >
-                                                            {expiry}
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className={classes}>
-                                                <Tooltip content="Edit User">
-                                                    <IconButton variant="text">
-                                                        <PencilIcon className="h-4 w-4" />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </td>
-                                        </tr>
-                                    );
-                                }
-                            )}
+                                    <td>
+                                        <IconButton
+                                            variant="text"
+                                            onClick={() =>
+                                                deleteData(item.service_id)
+                                            }
+                                        >
+                                            {
+                                                <TrashIcon
+                                                    className="h-4 w-4"
+                                                    color="red"
+                                                />
+                                            }
+                                        </IconButton>
+
+                                        <IconButton
+                                            variant="text"
+                                            onClick={() => {
+                                                handleOpen1("xl"),
+                                                    setCurrentUser(item);
+                                            }}
+                                        >
+                                            <PencilIcon
+                                                className="h-4 w-4"
+                                                color="orange"
+                                            />
+                                        </IconButton>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </CardBody>
-                <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                    <Button
-                        variant="outlined"
-                        size="sm"
-                        className="bg-theme-bg text-theme-text"
-                    >
-                        Previous
-                    </Button>
-                    <div className="flex items-center gap-2">
-                        <IconButton
-                            variant="outlined"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            1
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            2
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            3
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            ...
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            8
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            9
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            10
-                        </IconButton>
-                    </div>
-                    <Button
-                        variant="outlined"
-                        size="sm"
-                        className="bg-theme-bg text-theme-text"
-                    >
-                        Next
-                    </Button>
-                </CardFooter>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                />
             </Card>
         </div>
     );

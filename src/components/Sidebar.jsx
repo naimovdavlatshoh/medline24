@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { PiHeartbeatFill } from "react-icons/pi";
 import { FaClinicMedical } from "react-icons/fa";
 import { IoPerson } from "react-icons/io5";
@@ -12,6 +12,7 @@ import { IoIosSettings } from "react-icons/io";
 import { RiGuideFill } from "react-icons/ri";
 import { RiHomeOfficeFill } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
+import { VscSymbolMethod } from "react-icons/vsc";
 
 import { BiSolidSelectMultiple } from "react-icons/bi";
 
@@ -44,6 +45,9 @@ function Icon({ id, open }) {
 
 const Sidebar = () => {
     const [sidebar, setSidebar] = useState(true);
+    const url = useLocation();
+    const currenurl = url.pathname;
+    console.log(currenurl);
 
     const [open, setOpen] = React.useState(0);
 
@@ -52,10 +56,10 @@ const Sidebar = () => {
     return (
         <div
             className={`${
-                sidebar ? "w-80" : "w-20"
-            } transition-all duration-300 bg-main-light dark:bg-main-dark text-white p-3 px-6 rounded-xl`}
+                sidebar ? "w-80" : "w-25"
+            } transition-all duration-300  text-white p-3 px-6  min-h-[120vh] bg-white`}
         >
-            <div className="h-[70px]">
+            <div className="h-[70px] text-main-green py-3">
                 {!sidebar ? (
                     <div className="h-full w-full  flex justify-center">
                         <FaClinicMedical
@@ -74,189 +78,252 @@ const Sidebar = () => {
             </div>
 
             <ul>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/"
-                        className={`flex gap-2  justify-${
+                        className={`flex gap-2   justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <FaHome size={30} />
+                        <FaHome size={25} />
                         {sidebar ? "Home" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/personal"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/personal"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <IoPerson size={30} />
+                        <IoPerson size={25} />
                         {sidebar ? "Персонал" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/division"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/division"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <IoPeopleSharp size={30} />
-                        {sidebar ? "Класификация персонала" : ""}
+                        <IoPeopleSharp size={25} />
+                        {sidebar ? "Отделы" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/service"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/service"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <MdMedicalServices size={30} />
+                        <MdMedicalServices size={25} />
                         {sidebar ? "Услуги" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/analyze"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/analyze"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <FaGripfire size={30} />
+                        <FaGripfire size={25} />
                         {sidebar ? "Анализы" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/visits"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
-                        to="/profile"
+                        to="/visits"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <RiBuilding2Fill size={30} />
-                        {sidebar ? (
-                            <Accordion
-                                open={open === 1}
-                                icon={<Icon id={1} open={open} />}
-                            >
-                                <div
-                                    onClick={() => handleOpen(1)}
-                                    className="w-full flex justify-between"
-                                >
-                                    Визиты
-                                    <IoIosArrowDown />
-                                </div>
-                                <AccordionBody>
-                                    <p className="text-white">Типы</p>
-                                </AccordionBody>
-                            </Accordion>
-                        ) : (
-                            ""
-                        )}
+                        <RiBuilding2Fill size={25} />
+
+                        {sidebar ? "Визиты" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
-                    <Link
-                        to="/profile"
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/objects"
+                            ? "bg-main-green text-white"
+                            : currenurl == "/palats"
+                            ? "bg-main-green text-white"
+                            : currenurl == "/beds"
+                            ? "bg-main-green text-white"
+                            : currenurl == "/koyk"
+                            ? "bg-main-green text-white"
+                            : "text-main-green bg-white"
+                    }`}
+                >
+                    <p
+                        to=""
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <RiBuilding2Fill size={30} />
+                        <RiBuilding2Fill size={25} />
                         {sidebar ? (
                             <Accordion
                                 open={open === 2}
                                 icon={<Icon id={2} open={open} />}
                             >
-                                <div
+                                <Link
+                                    to={"/objects"}
                                     onClick={() => handleOpen(2)}
                                     className="w-full flex justify-between"
                                 >
                                     Объекты
                                     <IoIosArrowDown />
-                                </div>
+                                </Link>
                                 <AccordionBody>
-                                    <ul className="text-white">
-                                        <li className="mb-1">Объекты</li>
-                                        <li className="mb-1">Палаты</li>
-                                        <li className="mb-1">Койки</li>
-                                        <li className="mb-1">Типы</li>
+                                    <ul className="text-white flex flex-col gap-2">
+                                        <Link
+                                            className={`py-1 px-1 rounded-md ${
+                                                currenurl == "/objects"
+                                                    ? "bg-white text-main-green "
+                                                    : ""
+                                            }`}
+                                            to={"/objects"}
+                                        >
+                                            Объекты
+                                        </Link>
+                                        <Link
+                                            className={`py-1 px-1 rounded-md ${
+                                                currenurl == "/palats"
+                                                    ? "bg-white text-main-green "
+                                                    : ""
+                                            }`}
+                                            to={"/palats"}
+                                        >
+                                            Палаты
+                                        </Link>
+                                        <Link
+                                            className={`py-1 px-1 rounded-md ${
+                                                currenurl == "/beds"
+                                                    ? "bg-white text-main-green "
+                                                    : ""
+                                            }`}
+                                            to={"/beds"}
+                                        >
+                                            Типы
+                                        </Link>
+                                        <Link
+                                            className={`py-1 px-1 rounded-md ${
+                                                currenurl == "/koyk"
+                                                    ? "bg-white text-main-green "
+                                                    : ""
+                                            }`}
+                                            to={"/koyk"}
+                                        >
+                                            Койки
+                                        </Link>
                                     </ul>
                                 </AccordionBody>
                             </Accordion>
                         ) : (
                             ""
                         )}
-                    </Link>
+                    </p>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/method"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
-                        to="/profile"
+                        to="/method"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <IoIosSettings size={30} />
-                        {sidebar ? (
-                            <Accordion
-                                open={open === 3}
-                                icon={<Icon id={3} open={open} />}
-                            >
-                                <div
-                                    onClick={() => handleOpen(3)}
-                                    className="w-full flex justify-between"
-                                >
-                                    Настройки
-                                    <IoIosArrowDown />
-                                </div>
-                                <AccordionBody>
-                                    <ul className="text-white">
-                                        <li className="mb-1">Методы</li>
-                                        <li className="mb-1">Документ</li>
-                                        <li className="mb-1">Чек</li>
-                                        <li className="mb-1">Панель</li>
-                                        <li className="mb-1">Кабинеты</li>
-                                    </ul>
-                                </AccordionBody>
-                            </Accordion>
-                        ) : (
-                            ""
-                        )}
+                        <VscSymbolMethod size={25} />
+                        {sidebar ? "Метод ввода лекарств" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/share"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
-                        to="/profile"
+                        to="/share"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <BiSolidSelectMultiple size={30} />
-                        {sidebar ? "Мульти-аккаунт" : ""}
-                    </Link>
-                </li>
-                <li className="mb-4">
-                    <Link
-                        to="/profile"
-                        className={`flex gap-2 justify-${
-                            sidebar ? "start" : "center"
-                        }`}
-                    >
-                        <RiGuideFill size={30} />
+                        <RiGuideFill size={25} />
                         {sidebar ? "Напровители" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/actions"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
-                        to="/profile"
+                        to="/actions"
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
                     >
-                        <RiHomeOfficeFill size={30} />
+                        <BiSolidSelectMultiple size={25} />
+                        {sidebar ? "Action" : ""}
+                    </Link>
+                </li>
+                <li className="mb-4">
+                    <Link
+                        to="/warehouse"
+                        className={`flex gap-2 justify-${
+                            sidebar ? "start" : "center"
+                        }`}
+                    >
+                        <RiHomeOfficeFill size={25} />
                         {sidebar ? "Склады" : ""}
                     </Link>
                 </li>

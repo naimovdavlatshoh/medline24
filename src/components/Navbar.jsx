@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
+    const [lang, setLang] = useState(localStorage.getItem("lang"));
     return (
-        <div className="bg-main-light dark:bg-main-dark h-[80px] flex items-center justify-end px-3 rounded-xl transition-all duration-300">
+        <div className="bg-white flex items-center justify-end px-3 h-[80px]  transition-all duration-300">
+            <div className="flex gap-2">
+                <div
+                    className={` cursor-pointer hover:text-main-green hover:bg-white w-[40px] h-[40px] flex justify-center items-center rounded-[20px] transition-[300ms] ${
+                        lang == "uz"
+                            ? " text-main-green shadow-md shadow-main-green"
+                            : "text-main-green"
+                    }`}
+                    onClick={() => {
+                        localStorage.setItem("lang", "uz"),
+                            setLang(1),
+                            window.location.reload();
+                    }}
+                >
+                    uz
+                </div>
+                <div
+                    className={` cursor-pointer hover:text-main-green hover:bg-white w-[40px] h-[40px] flex justify-center items-center rounded-[20px] transition-[300ms] ${
+                        lang == "ru"
+                            ? "text-main-green shadow-md shadow-main-green"
+                            : "text-main-green"
+                    }`}
+                    onClick={() => {
+                        localStorage.setItem("lang", "ru"),
+                            setLang(2),
+                            window.location.reload();
+                    }}
+                >
+                    ru
+                </div>
+            </div>
             <ThemeToggle />
         </div>
     );
