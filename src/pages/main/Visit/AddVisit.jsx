@@ -18,22 +18,19 @@ export function AddVisit({ changeStatus, language }) {
     const [types, setTypes] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
     const [type, setType] = useState(null);
-    const [free_name_ru, setFree_name_ru] = useState("");
-    const [free_name_uz, setFree_name_uz] = useState("");
+    const [free_name, setFree_name] = useState("");
 
     const handleOpen = (value) => setSize(value);
 
     useEffect(() => {
         GetDataSimple("api/visittype/list").then((res) => {
             setTypes(res);
-            console.log(res);
         });
     }, []);
 
     const AddUser = (e) => {
         const data = {
-            free_visit_name_ru: free_name_ru,
-            free_visit_name_uz: free_name_uz,
+            free_visit_name: free_name,
             visit_type_id: type,
             option: selectedTypes,
         };
@@ -80,13 +77,14 @@ export function AddVisit({ changeStatus, language }) {
                 open={size === "lg"}
                 size={size || "md"}
                 handler={handleOpen}
+                className="text-theme-text bg-theme-bg"
             >
                 <DialogHeader>
                     {language == "ru" ? "Добавить Визит" : "Vizit qo'shish"}
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex flex-col md:flex-row gap-5">
                             <div className="w-1/2 flex flex-col">
                                 {/* Select for main visit type */}
                                 <Select
@@ -103,9 +101,7 @@ export function AddVisit({ changeStatus, language }) {
                                                 setType(t.visit_type_id)
                                             }
                                         >
-                                            {language == "ru"
-                                                ? t?.visit_name_ru
-                                                : t?.visit_name_uz}
+                                            {t?.visit_name}
                                         </Option>
                                     ))}
                                 </Select>
@@ -114,11 +110,7 @@ export function AddVisit({ changeStatus, language }) {
                                 {types?.option?.map((o) => (
                                     <Checkbox
                                         key={o.visit_type_id}
-                                        label={
-                                            language == "ru"
-                                                ? o?.visit_name_ru
-                                                : o?.visit_name_uz
-                                        }
+                                        label={o?.visit_name}
                                         onChange={() => handleSelectType(o)}
                                     />
                                 ))}
@@ -132,19 +124,7 @@ export function AddVisit({ changeStatus, language }) {
                                                 : "nomi(ru)"
                                         }
                                         onChange={(e) =>
-                                            setFree_name_ru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label={
-                                            language == "ru"
-                                                ? "наимевания(uz)"
-                                                : "nomi(uz)"
-                                        }
-                                        onChange={(e) =>
-                                            setFree_name_uz(e.target.value)
+                                            setFree_name(e.target.value)
                                         }
                                     />
                                 </div>

@@ -16,8 +16,7 @@ import { Add } from "../../utils/constants";
 export function AddWareHouse({ changeStatus, language }) {
     const [size, setSize] = React.useState(null);
 
-    const [nameru, setNameru] = useState("");
-    const [nameuz, setNameuz] = useState("");
+    const [name, setName] = useState("");
     const [mainStatus, setMainStatus] = useState(1);
     const [wareStatus, setWareStatus] = useState(1);
     const [externalType, setexternalType] = useState(1);
@@ -28,8 +27,7 @@ export function AddWareHouse({ changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            warehouse_name_ru: nameru,
-            warehouse_name_uz: nameuz,
+            warehouse_name: name,
             main_status: mainStatus,
             warehouse_status: wareStatus,
             external_type: externalType,
@@ -74,22 +72,11 @@ export function AddWareHouse({ changeStatus, language }) {
                                                 : "nomi (ru)"
                                         }
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label={
-                                            language == "ru"
-                                                ? "имя (uz):"
-                                                : "nomi (uz)"
-                                        }
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
-                                        }
-                                    />
-                                </div>
+
                                 <div className="mb-3">
                                     <Select
                                         label={

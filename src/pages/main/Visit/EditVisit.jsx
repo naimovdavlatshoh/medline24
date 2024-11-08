@@ -21,9 +21,7 @@ export function EditVisit({ item, changeStatus, language }) {
     const [types, setTypes] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
     const [type, setType] = useState(null);
-    const [free_name_ru, setFree_name_ru] = useState(item?.free_visit_name_ru);
-    const [free_name_uz, setFree_name_uz] = useState(item?.free_visit_name_uz);
-    console.log(item);
+    const [free_name, setFree_name] = useState(item?.free_visit_name);
 
     const handleOpen = (value) => setSize(value);
 
@@ -35,8 +33,7 @@ export function EditVisit({ item, changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            free_visit_name_ru: free_name_ru,
-            free_visit_name_uz: free_name_uz,
+            free_visit_name: free_name,
             visit_type_id: type,
             option: selectedTypes,
         };
@@ -80,6 +77,7 @@ export function EditVisit({ item, changeStatus, language }) {
             </IconButton>
 
             <Dialog
+                className="bg-theme-bg text-theme-text"
                 open={size === "lg"}
                 size={size || "md"}
                 handler={handleOpen}
@@ -91,7 +89,7 @@ export function EditVisit({ item, changeStatus, language }) {
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex flex-col md:flex-row gap-5">
                             <div className="w-1/2 flex flex-col">
                                 {/* Select for main visit type */}
                                 <Select
@@ -116,12 +114,9 @@ export function EditVisit({ item, changeStatus, language }) {
                                 {/* Checkboxes for option visit types */}
                                 {types?.option?.map((o) => (
                                     <Checkbox
+                                        className="text-theme-text"
                                         key={o.visit_type_id}
-                                        label={
-                                            language == "ru"
-                                                ? o?.visit_name_ru
-                                                : o?.visit_name_uz
-                                        }
+                                        label={o?.visit_name}
                                         onChange={() => handleSelectType(o)}
                                     />
                                 ))}
@@ -134,22 +129,9 @@ export function EditVisit({ item, changeStatus, language }) {
                                                 ? "наимевания(ru)"
                                                 : "nomi(ru)"
                                         }
-                                        defaultValue={item?.free_visit_name_ru}
+                                        defaultValue={item?.free_visit_name}
                                         onChange={(e) =>
-                                            setFree_name_ru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label={
-                                            language == "ru"
-                                                ? "наимевания(uz)"
-                                                : "nomi(uz)"
-                                        }
-                                        defaultValue={item?.free_visit_name_uz}
-                                        onChange={(e) =>
-                                            setFree_name_uz(e.target.value)
+                                            setFree_name(e.target.value)
                                         }
                                     />
                                 </div>

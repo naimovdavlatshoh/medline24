@@ -19,8 +19,7 @@ export function AddObject({ changeStatus, language }) {
     const [selectedTypes, setSelectedTypes] = useState([]);
     const [type, setType] = useState(null);
     const [flour, setFlour] = useState(0);
-    const [nameru, setNameru] = useState("");
-    const [nameuz, setNameuz] = useState("");
+    const [name, setName] = useState("");
 
     const handleOpen = (value) => setSize(value);
 
@@ -32,8 +31,7 @@ export function AddObject({ changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            object_name_ru: nameru,
-            object_name_uz: nameuz,
+            object_name: name,
             total_floors: flour,
         };
 
@@ -57,13 +55,14 @@ export function AddObject({ changeStatus, language }) {
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
+                className="bg-theme-bg text-theme-text"
             >
                 <DialogHeader>
                     {language == "ru" ? "Добавить Здание" : "Bino qo'shish"}
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex gap-5 flex-col md:flex-row">
                             <div className="w-full">
                                 <div className="mb-3 w-1/2">
                                     <Input
@@ -85,19 +84,7 @@ export function AddObject({ changeStatus, language }) {
                                                 : "Bino nomi (ru):"
                                         }
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label={
-                                            language == "ru"
-                                                ? "Наименование здания (uz):"
-                                                : "Bino nomi (uz):"
-                                        }
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

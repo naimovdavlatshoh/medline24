@@ -23,6 +23,7 @@ import {
     IconButton,
     Tooltip,
     Input,
+    Spinner,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
 import {
@@ -32,6 +33,7 @@ import {
     PostDataTokenJson,
 } from "../../services";
 import Pagination from "../../components/Pagination";
+import LOADING from "../../assets/images/loader.gif";
 
 const TABLE_HEADRU = ["N", "Логин", "ФИО", "Роль", "Действия"];
 const TABLE_HEADUZ = ["N", "Login", "FISH", "Rol", "Amal"];
@@ -65,6 +67,7 @@ const Personal = () => {
     const [language, setLanguage] = useState("ru");
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const lang = localStorage.getItem("lang");
@@ -82,10 +85,13 @@ const Personal = () => {
         });
     }, []);
     useEffect(() => {
+        setLoading(true);
+
         GetDataSimple(`api/user/list?page=${currentPage}&limit=10`).then(
             (res) => {
                 setUsers(res?.result);
                 setTotalPages(res?.pages);
+                setLoading(false);
             }
         );
     }, [status, currentPage]);
@@ -148,11 +154,13 @@ const Personal = () => {
         setDeletedId(id);
     };
 
-    console.log(currentUser);
-
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru"
                         ? "Вы уверены, что хотите удалить?"
@@ -191,7 +199,7 @@ const Personal = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
@@ -200,18 +208,12 @@ const Personal = () => {
                                                 ? "Выбирите роль:"
                                                 : "Rol Tanlang:"
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {roles?.map((item, index) => (
                                             <div>
                                                 <p className="font-bold mb-3">
-                                                    {language == "ru"
-                                                        ? item?.role_name_ru
-                                                        : item?.role_name_uz}
+                                                    {item?.role_name}
                                                 </p>
                                                 {roles[index]?.child?.map(
                                                     (i) => (
@@ -221,9 +223,7 @@ const Personal = () => {
                                                             }}
                                                             className="text-theme-text bg-theme-bg mb-2"
                                                         >
-                                                            {language == "ru"
-                                                                ? i.role_name_ru
-                                                                : i.role_name_uz}
+                                                            {i.role_name}
                                                         </Option>
                                                     )
                                                 )}
@@ -246,9 +246,7 @@ const Personal = () => {
                                                 }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item?.department_name_ru
-                                                    : item?.department_name_uz}
+                                                {item?.department_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -368,20 +366,16 @@ const Personal = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => UpdateUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
                                         label={
-                                            language == "ruz"
+                                            language == "ru"
                                                 ? "Выбрать роль : "
                                                 : "Rol tanlang : "
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? currentUser?.role_name_ru
-                                                : currentUser?.role_name_uz
-                                        }
+                                        value={currentUser?.role_name}
                                     >
                                         {roles?.map((item, index) => (
                                             <div>
@@ -399,18 +393,15 @@ const Personal = () => {
                                                                             i?.role_id,
                                                                         ...prev,
                                                                         ...prev,
-                                                                        ["role_name_uz"]:
-                                                                            i?.role_name_uz,
-                                                                        ["role_name_ru"]:
-                                                                            i?.role_name_ru,
+
+                                                                        ["role_name"]:
+                                                                            i?.role_name,
                                                                     })
                                                                 );
                                                             }}
                                                             className="text-theme-text bg-theme-bg mb-2"
                                                         >
-                                                            {language == "ru"
-                                                                ? i.role_name_ru
-                                                                : i.role_name_uz}
+                                                            {i.role_name}
                                                         </Option>
                                                     )
                                                 )}
@@ -548,89 +539,195 @@ const Personal = () => {
                     </DialogBody>
                 </Dialog>
             </>
-
-            <Card className="h-full w-full bg-theme-bg text-theme-text rounded-2xl px-5">
-                <CardHeader
-                    floated={false}
-                    shadow={false}
-                    className="rounded-none bg-theme-bg text-theme-text"
-                >
-                    <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center bg-theme-bg text-theme-text">
-                        <div>
-                            <Typography variant="h5" color="blue-gray">
-                                {language == "ru"
-                                    ? "Список Пользователей"
-                                    : "Foydalanuvchilar ro'yxati"}
-                            </Typography>
-                        </div>
-                        <div className="flex w-full shrink-0 gap-2 md:w-max">
-                            <div className="w-full md:w-72">
-                                <Input
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    label={
-                                        language == "ru" ? "поиск" : "qidiruv"
-                                    }
-                                    icon={
-                                        <MagnifyingGlassIcon className="h-5 w-5" />
-                                    }
-                                />
+            {loading ? (
+                <div className="w-full h-full flex justify-center items-center">
+                    <img src={LOADING} alt="" />
+                </div>
+            ) : (
+                <Card className="h-full w-full bg-theme-bg text-theme-text rounded-2xl px-5">
+                    <CardHeader
+                        floated={false}
+                        shadow={false}
+                        className="rounded-none bg-theme-bg text-theme-text"
+                    >
+                        <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center bg-theme-bg text-theme-text">
+                            <div>
+                                <Typography variant="h5" color="blue-gray">
+                                    {language == "ru"
+                                        ? "Список Пользователей"
+                                        : "Foydalanuvchilar ro'yxati"}
+                                </Typography>
                             </div>
-                            <Button
-                                className="flex items-center gap-3 bg-main-green"
-                                onClick={() => handleOpen("xl")}
-                                size="sm"
-                            >
-                                {language == "ru"
-                                    ? "добавить пользователя"
-                                    : "foydalanuvchi qo'shish"}
-                            </Button>
+                            <div className="flex w-full shrink-0 gap-2 md:w-max">
+                                <div className="w-full md:w-72">
+                                    <Input
+                                        onChange={(e) =>
+                                            setSearch(e.target.value)
+                                        }
+                                        label={
+                                            language == "ru"
+                                                ? "поиск"
+                                                : "qidiruv"
+                                        }
+                                        icon={
+                                            <MagnifyingGlassIcon className="h-5 w-5" />
+                                        }
+                                    />
+                                </div>
+                                <Button
+                                    className="flex items-center gap-3 bg-main-green"
+                                    onClick={() => handleOpen("xl")}
+                                    size="sm"
+                                >
+                                    {language == "ru"
+                                        ? "добавить пользователя"
+                                        : "foydalanuvchi qo'shish"}
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                </CardHeader>
-                <CardBody className="overflow-scroll px-0">
-                    <table className="w-full min-w-max table-auto text-left">
-                        <thead>
-                            {language == "ru" ? (
-                                <tr>
-                                    {TABLE_HEADRU.map((head) => (
-                                        <th
-                                            key={head}
-                                            className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                                        >
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal leading-none opacity-70"
+                    </CardHeader>
+                    <CardBody className="overflow-scroll px-0">
+                        <table className="w-full min-w-max table-auto text-left">
+                            <thead>
+                                {language == "ru" ? (
+                                    <tr>
+                                        {TABLE_HEADRU.map((head) => (
+                                            <th
+                                                key={head}
+                                                className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
                                             >
-                                                {head}
-                                            </Typography>
-                                        </th>
-                                    ))}
-                                </tr>
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal leading-none opacity-70"
+                                                >
+                                                    {head}
+                                                </Typography>
+                                            </th>
+                                        ))}
+                                    </tr>
+                                ) : (
+                                    <tr>
+                                        {TABLE_HEADUZ.map((head) => (
+                                            <th
+                                                key={head}
+                                                className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                                            >
+                                                <Typography
+                                                    variant="small"
+                                                    color="blue-gray"
+                                                    className="font-normal leading-none opacity-70"
+                                                >
+                                                    {head}
+                                                </Typography>
+                                            </th>
+                                        ))}
+                                    </tr>
+                                )}
+                            </thead>
+                            {search === "" ? (
+                                <>
+                                    {" "}
+                                    <tbody>
+                                        {users.map((item, index) => (
+                                            <tr key={index}>
+                                                <td className="p-4">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-bold"
+                                                    >
+                                                        {index + 1}
+                                                    </Typography>
+                                                </td>
+                                                <td className="p-4">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-bold"
+                                                    >
+                                                        {item?.login}
+                                                    </Typography>
+                                                </td>
+                                                <td className="p-4">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal"
+                                                    >
+                                                        {item?.lastname +
+                                                            " " +
+                                                            item?.firstname +
+                                                            " " +
+                                                            item?.fathername}
+                                                    </Typography>
+                                                </td>
+                                                <td className="p-4">
+                                                    <Typography
+                                                        variant="small"
+                                                        color="blue-gray"
+                                                        className="font-normal"
+                                                    >
+                                                        {item?.role_name}
+                                                    </Typography>
+                                                </td>
+
+                                                <td>
+                                                    <Tooltip
+                                                        content={
+                                                            language == "ru"
+                                                                ? "удалить пользователя"
+                                                                : "foydalanuvchini o'chirish"
+                                                        }
+                                                    >
+                                                        <IconButton
+                                                            variant="text"
+                                                            onClick={() =>
+                                                                deleteData(
+                                                                    item.user_id
+                                                                )
+                                                            }
+                                                        >
+                                                            {
+                                                                <TrashIcon
+                                                                    className="h-4 w-4"
+                                                                    color="red"
+                                                                />
+                                                            }
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                    <Tooltip
+                                                        content={
+                                                            language == "ru"
+                                                                ? "редактировать пользователя"
+                                                                : "foydalanuvchini o'zgartirish"
+                                                        }
+                                                    >
+                                                        <IconButton
+                                                            variant="text"
+                                                            onClick={() => {
+                                                                handleOpen1(
+                                                                    "xl"
+                                                                ),
+                                                                    setCurrentUser(
+                                                                        item
+                                                                    );
+                                                            }}
+                                                        >
+                                                            <PencilIcon
+                                                                className="h-4 w-4"
+                                                                color="orange"
+                                                            />
+                                                        </IconButton>
+                                                    </Tooltip>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </>
                             ) : (
-                                <tr>
-                                    {TABLE_HEADUZ.map((head) => (
-                                        <th
-                                            key={head}
-                                            className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                                        >
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal leading-none opacity-70"
-                                            >
-                                                {head}
-                                            </Typography>
-                                        </th>
-                                    ))}
-                                </tr>
-                            )}
-                        </thead>
-                        {search === "" ? (
-                            <>
-                                {" "}
                                 <tbody>
-                                    {users.map((item, index) => (
+                                    {searchData.map((item, index) => (
                                         <tr key={index}>
                                             <td className="p-4">
                                                 <Typography
@@ -669,20 +766,13 @@ const Personal = () => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.role_name_ru
-                                                        : item?.role_name_uz}
+                                                    {item?.role_name_ru}
                                                 </Typography>
                                             </td>
+                                            <td className="p-4"></td>
 
                                             <td>
-                                                <Tooltip
-                                                    content={
-                                                        language == "ru"
-                                                            ? "удалить пользователя"
-                                                            : "foydalanuvchini o'chirish"
-                                                    }
-                                                >
+                                                <Tooltip content="Delete User">
                                                     <IconButton
                                                         variant="text"
                                                         onClick={() =>
@@ -699,13 +789,7 @@ const Personal = () => {
                                                         }
                                                     </IconButton>
                                                 </Tooltip>
-                                                <Tooltip
-                                                    content={
-                                                        language == "ru"
-                                                            ? "редактировать пользователя"
-                                                            : "foydalanuvchini o'zgartirish"
-                                                    }
-                                                >
+                                                <Tooltip content="Edit User">
                                                     <IconButton
                                                         variant="text"
                                                         onClick={() => {
@@ -725,98 +809,16 @@ const Personal = () => {
                                         </tr>
                                     ))}
                                 </tbody>
-                            </>
-                        ) : (
-                            <tbody>
-                                {searchData.map((item, index) => (
-                                    <tr key={index}>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-bold"
-                                            >
-                                                {index + 1}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-bold"
-                                            >
-                                                {item?.login}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {item?.lastname +
-                                                    " " +
-                                                    item?.firstname +
-                                                    " " +
-                                                    item?.fathername}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {item?.role_name_ru}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4"></td>
-
-                                        <td>
-                                            <Tooltip content="Delete User">
-                                                <IconButton
-                                                    variant="text"
-                                                    onClick={() =>
-                                                        deleteData(item.user_id)
-                                                    }
-                                                >
-                                                    {
-                                                        <TrashIcon
-                                                            className="h-4 w-4"
-                                                            color="red"
-                                                        />
-                                                    }
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip content="Edit User">
-                                                <IconButton
-                                                    variant="text"
-                                                    onClick={() => {
-                                                        handleOpen1("xl"),
-                                                            setCurrentUser(
-                                                                item
-                                                            );
-                                                    }}
-                                                >
-                                                    <PencilIcon
-                                                        className="h-4 w-4"
-                                                        color="orange"
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        )}
-                    </table>
-                </CardBody>
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    setCurrentPage={setCurrentPage}
-                />
-            </Card>
+                            )}
+                        </table>
+                    </CardBody>
+                    <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        setCurrentPage={setCurrentPage}
+                    />
+                </Card>
+            )}
         </div>
     );
 };

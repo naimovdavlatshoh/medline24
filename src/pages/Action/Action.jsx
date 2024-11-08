@@ -134,7 +134,7 @@ const Action = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru"
                         ? "Вы уверены, что хотите удалить?"
@@ -191,18 +191,12 @@ const Action = () => {
                                                 ? "Выбирите роль:"
                                                 : "Rol Tanlang:"
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {roles?.map((item, index) => (
                                             <div>
                                                 <p className="font-bold mb-3">
-                                                    {language == "ru"
-                                                        ? item?.role_name_ru
-                                                        : item?.role_name_uz}
+                                                    {item?.role_name}
                                                 </p>
                                                 {roles[index]?.child?.map(
                                                     (i) => (
@@ -212,9 +206,7 @@ const Action = () => {
                                                             }}
                                                             className="text-theme-text bg-theme-bg mb-2"
                                                         >
-                                                            {language == "ru"
-                                                                ? i.role_name_ru
-                                                                : i.role_name_uz}
+                                                            {i.role_name}
                                                         </Option>
                                                     )
                                                 )}
@@ -237,9 +229,7 @@ const Action = () => {
                                                 }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item?.department_name_ru
-                                                    : item?.department_name_uz}
+                                                {item?.department_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -433,9 +423,7 @@ const Action = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.aksiya_name_ru
-                                                : item?.aksiya_name_uz}
+                                            {item?.aksiya_name}
                                         </Typography>
                                     </td>
 

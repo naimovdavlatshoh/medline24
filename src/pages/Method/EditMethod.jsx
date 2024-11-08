@@ -19,15 +19,13 @@ export function EditMethod({ item, changeStatus }) {
     const [size, setSize] = React.useState(null);
     console.log(item);
 
-    const [nameru, setNameru] = useState(item?.method_name_ru);
-    const [nameuz, setNameuz] = useState(item?.method_name_uz);
+    const [name, setName] = useState(item?.method_name);
 
     const handleOpen = (value) => setSize(value);
 
     const AddUser = (e) => {
         const data = {
-            method_name_ru: nameru,
-            method_name_uz: nameuz,
+            method_name: name,
         };
 
         PostDataTokenJson(`api/injmethod/update/${item?.inj_met_id}`, data)
@@ -50,6 +48,7 @@ export function EditMethod({ item, changeStatus }) {
             </Tooltip>
 
             <Dialog
+            className="bg-theme-bg text-theme-text"
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
@@ -61,20 +60,11 @@ export function EditMethod({ item, changeStatus }) {
                             <div className="w-full">
                                 <div className="mb-3">
                                     <Input
-                                        defaultValue={nameru}
+                                        defaultValue={name}
                                         label="
                                         Название (ru)"
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        defaultValue={nameuz}
-                                        label="Название (uz)"
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

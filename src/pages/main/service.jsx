@@ -75,8 +75,7 @@ const Service = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [search, setSearch] = useState("");
     const [searchData, setSearchData] = useState([]);
-    const [serviceru, setServiceru] = useState("");
-    const [serviceuz, setServiceuz] = useState("");
+    const [service, setService] = useState("");
     const [priceru, setPriceru] = useState(0);
     const [priceuz, setPriceuz] = useState(0);
     const [language, setLanguage] = useState("ru");
@@ -118,8 +117,7 @@ const Service = () => {
     const AddUser = (e) => {
         e.preventDefault();
         const data = {
-            service_name_ru: serviceru,
-            service_name_uz: serviceuz,
+            service_name: service,
             price_for_locals: priceuz,
             price_for_tourist: priceru,
             role_id: role,
@@ -169,7 +167,11 @@ const Service = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -210,7 +212,7 @@ const Service = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
@@ -227,9 +229,7 @@ const Service = () => {
                                                 }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item?.role_name_ru
-                                                    : item?.role_name_uz}
+                                                {item?.role_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -248,9 +248,7 @@ const Service = () => {
                                                 }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item?.department_name_ru
-                                                    : item?.department_name_uz}
+                                                {item?.department_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -261,11 +259,7 @@ const Service = () => {
                                                 ? "Выбирите тип:"
                                                 : "tur tanlang:"
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {types?.map((item) => (
                                             <Option
@@ -274,9 +268,7 @@ const Service = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item.visit_name_ru
-                                                    : item.visit_name_uz}
+                                                {item.visit_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -285,24 +277,13 @@ const Service = () => {
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         onChange={(e) =>
-                                            setServiceru(e.target.value)
+                                            setService(e.target.value)
                                         }
                                         color="blue"
                                         label={
                                             language == "ru"
                                                 ? "имя службы (ru):"
                                                 : "xizmat nomi (ru):"
-                                        }
-                                    />
-                                    <Input
-                                        onChange={(e) =>
-                                            setServiceuz(e.target.value)
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "имя службы (uz):"
-                                                : "xizmat nomi (uz):"
                                         }
                                     />
                                 </div>
@@ -377,22 +358,18 @@ const Service = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => UpdateUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
                                         label={
                                             language == "ru"
                                                 ? "Выбрать роль : " +
-                                                  currentUser?.role_name_ru
+                                                  currentUser?.role_name
                                                 : "Rol tanlash : " +
-                                                  currentUser?.role_name_uz
+                                                  currentUser?.role_name
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {roles?.map((item, index) => (
                                             <Option
@@ -405,9 +382,7 @@ const Service = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item.role_name_ru
-                                                    : item.role_name_uz}
+                                                {item.role_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -635,9 +610,7 @@ const Service = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.role_name_ru
-                                                : item?.role_name_uz}
+                                            {item?.role_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -646,9 +619,7 @@ const Service = () => {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {language == "ru"
-                                                ? item?.department_name_ru
-                                                : item?.department_name_uz}
+                                            {item?.department_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -657,14 +628,10 @@ const Service = () => {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {language == "ru"
-                                                ? item?.service_name_ru
-                                                : item?.service_name_uz}
+                                            {item?.service_name}
                                         </Typography>
                                     </td>
-                                    <td className="p-4">
-                                        {item?.visit_name_ru}
-                                    </td>
+                                    <td className="p-4">{item?.visit_name}</td>
                                     <td className="p-4">
                                         {item?.price_for_locals +
                                             "/" +

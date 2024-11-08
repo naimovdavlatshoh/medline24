@@ -86,7 +86,7 @@ const Visits = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -203,9 +203,7 @@ const Visits = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.free_visit_name_ru
-                                                : item?.free_visit_name_uz}
+                                            {item?.free_visit_name}
                                         </Typography>
                                     </td>
                                     {/* <td className="p-4">

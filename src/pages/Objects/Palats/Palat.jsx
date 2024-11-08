@@ -84,7 +84,7 @@ const Palat = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -201,9 +201,7 @@ const Palat = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.object_name_ru
-                                                : item?.object_name_uz}
+                                            {item?.object_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -221,9 +219,7 @@ const Palat = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.department_name_ru
-                                                : item?.department_name_uz}
+                                            {item?.department_name}
                                         </Typography>
                                     </td>
 

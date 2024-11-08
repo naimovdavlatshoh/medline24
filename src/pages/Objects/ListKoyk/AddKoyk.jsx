@@ -15,8 +15,7 @@ import { Add } from "../../../utils/constants";
 
 export function AddKoyk({ changeStatus, language }) {
     const [size, setSize] = React.useState(null);
-    const [nameuz, setNameuz] = useState("");
-    const [nameru, setNameru] = useState("");
+    const [name, setName] = useState("");
     const [price, setPrice] = useState(0);
     const [localPrice, setLocalPrice] = useState(0);
     const [touristPrice, setTouristPrice] = useState(0);
@@ -25,8 +24,7 @@ export function AddKoyk({ changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            type_name_ru: nameru,
-            type_name_uz: nameuz,
+            type_name: name,
             koyka_local_price: localPrice,
             koyka_tourist_price: touristPrice,
         };
@@ -48,6 +46,7 @@ export function AddKoyk({ changeStatus, language }) {
             </Button>
 
             <Dialog
+                className="text-theme-text bg-theme-bg"
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
@@ -63,23 +62,11 @@ export function AddKoyk({ changeStatus, language }) {
                                     <Input
                                         label={
                                             language == "ru"
-                                                ? "наимевания (uz)"
-                                                : "nomi (uz)"
-                                        }
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label={
-                                            language == "ru"
                                                 ? "наимевания (ru)"
                                                 : "nomi (ru)"
                                         }
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

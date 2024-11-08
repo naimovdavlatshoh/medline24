@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { AddMethod } from "./AddMethod";
 import { EditMethod } from "./EditMethod";
 import { DeleteData, GetDataSimple } from "../../services";
+import Pagination from "../../components/Pagination";
 
 const TABLE_HEAD = ["N", "Название", "Действия"];
 
@@ -41,11 +42,17 @@ const Method = () => {
     const [status, setStatus] = useState(false);
     const [search, setSearch] = useState("");
     const [deleteId, setDeletedId] = useState(null);
+    const [language, setLanguage] = useState("ru");
+    const [totalPages, setTotalPages] = useState(1);
+    const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        GetDataSimple("api/injmethod/list?page=1&limit=10").then((res) => {
-            setUsers(res?.result);
-        });
+        GetDataSimple(`api/injmethod/list?page=${currentPage}&limit=10`).then(
+            (res) => {
+                setUsers(res?.result);
+                setTotalPages(res?.pages);
+            }
+        );
     }, [status]);
 
     const changeStatus = () => {
@@ -66,7 +73,7 @@ const Method = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>Are you sure delete this wiki?</DialogHeader>
                 <DialogFooter>
                     <Button
@@ -132,208 +139,58 @@ const Method = () => {
                                 ))}
                             </tr>
                         </thead>
-                        {search === "" ? (
-                            <>
-                                {" "}
-                                <tbody>
-                                    {users.map((item, index) => (
-                                        <tr key={index}>
-                                            <td className="p-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-bold"
-                                                >
-                                                    {index + 1}
-                                                </Typography>
-                                            </td>
-                                            <td className="p-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-bold"
-                                                >
-                                                    {item?.method_name_ru}
-                                                </Typography>
-                                            </td>
 
-                                            <td>
-                                                <EditMethod
-                                                    item={item}
-                                                    changeStatus={changeStatus}
+                        <tbody>
+                            {users.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-bold"
+                                        >
+                                            {index + 1}
+                                        </Typography>
+                                    </td>
+                                    <td className="p-4">
+                                        <Typography
+                                            variant="small"
+                                            color="blue-gray"
+                                            className="font-bold"
+                                        >
+                                            {item?.method_name}
+                                        </Typography>
+                                    </td>
+
+                                    <td>
+                                        <EditMethod
+                                            item={item}
+                                            changeStatus={changeStatus}
+                                        />
+                                        <Tooltip content="Delete User">
+                                            <IconButton
+                                                variant="text"
+                                                onClick={() =>
+                                                    deleteData(item.palata_id)
+                                                }
+                                            >
+                                                <TrashIcon
+                                                    className="h-4 w-4"
+                                                    color="red"
                                                 />
-                                                <Tooltip content="Delete User">
-                                                    <IconButton
-                                                        variant="text"
-                                                        onClick={() =>
-                                                            deleteData(
-                                                                item.palata_id
-                                                            )
-                                                        }
-                                                    >
-                                                        <TrashIcon
-                                                            className="h-4 w-4"
-                                                            color="red"
-                                                        />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </>
-                        ) : (
-                            <tbody>
-                                {/* {searchData.map((item, index) => (
-                                    <tr key={index}>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-bold"
-                                            >
-                                                {index + 1}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-bold"
-                                            >
-                                                {item?.login}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {item?.lastname +
-                                                    " " +
-                                                    item?.firstname +
-                                                    " " +
-                                                    item?.fathername}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4">
-                                            <Typography
-                                                variant="small"
-                                                color="blue-gray"
-                                                className="font-normal"
-                                            >
-                                                {item?.role_name_ru}
-                                            </Typography>
-                                        </td>
-                                        <td className="p-4"></td>
-
-                                        <td>
-                                            <Tooltip content="Delete User">
-                                                <IconButton
-                                                    variant="text"
-                                                    onClick={() =>
-                                                        deleteData(item.user_id)
-                                                    }
-                                                >
-                                                    {
-                                                        <TrashIcon
-                                                            className="h-4 w-4"
-                                                            color="red"
-                                                        />
-                                                    }
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip content="Edit User">
-                                                <IconButton
-                                                    variant="text"
-                                                    onClick={() => {
-                                                        handleOpen1("xl"),
-                                                            setCurrentUser(
-                                                                item
-                                                            );
-                                                    }}
-                                                >
-                                                    <PencilIcon
-                                                        className="h-4 w-4"
-                                                        color="orange"
-                                                    />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </td>
-                                    </tr>
-                                ))} */}
-                            </tbody>
-                        )}
+                                            </IconButton>
+                                        </Tooltip>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
                     </table>
                 </CardBody>
-                <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-                    <Button
-                        variant="outlined"
-                        size="sm"
-                        className="bg-theme-bg text-theme-text"
-                    >
-                        Previous
-                    </Button>
-                    <div className="flex items-center gap-2">
-                        <IconButton
-                            variant="outlined"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            1
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            2
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            3
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            ...
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            8
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            9
-                        </IconButton>
-                        <IconButton
-                            variant="text"
-                            size="sm"
-                            className="bg-theme-bg text-theme-text"
-                        >
-                            10
-                        </IconButton>
-                    </div>
-                    <Button
-                        variant="outlined"
-                        size="sm"
-                        className="bg-theme-bg text-theme-text"
-                    >
-                        Next
-                    </Button>
-                </CardFooter>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    setCurrentPage={setCurrentPage}
+                />
             </Card>
         </div>
     );

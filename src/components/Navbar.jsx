@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 
-const Navbar = () => {
+const Navbar = ({ setTheme1 }) => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
+
     return (
-        <div className="bg-white flex items-center justify-end px-3 h-[80px]  transition-all duration-300">
+        <div className="bg-theme-bg text-theme-text flex items-center justify-end px-3 h-[80px]  transition-all duration-300">
             <div className="flex gap-2">
                 <div
                     className={` cursor-pointer hover:text-main-green hover:bg-white w-[40px] h-[40px] flex justify-center items-center rounded-[20px] transition-[300ms] ${
@@ -35,7 +36,7 @@ const Navbar = () => {
                     ru
                 </div>
             </div>
-            <ThemeToggle />
+            <ThemeToggle setTheme1={setTheme1} />
         </div>
     );
 };

@@ -32,7 +32,7 @@ import {
     PostDataTokenJson,
 } from "../../services";
 import Pagination from "../../components/Pagination";
-import { Add } from "../../utils/constants";
+import { Add, Edit } from "../../utils/constants";
 
 const TABLE_HEAD = ["N", "Роль", "Отдел", "Действия"];
 const TABLE_HEADUZ = ["N", "Rol", "Bo'lim", "Amal"];
@@ -51,8 +51,7 @@ const Division = () => {
     const [status, setStatus] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
     const [search, setSearch] = useState("");
-    const [department_name_ru, setDepartment_name_ru] = useState("");
-    const [department_name_uz, setDepartment_name_uz] = useState("");
+    const [department_name, setDepartment_name] = useState("");
     const [language, setLanguage] = useState("ru");
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
@@ -81,8 +80,7 @@ const Division = () => {
         e.preventDefault();
         const data = {
             role_id: role.role_id,
-            department_name_ru: department_name_ru,
-            department_name_uz: department_name_uz,
+            department_name: department_name,
         };
 
         PostDataTokenJson("api/department/create", data).then(() =>
@@ -96,8 +94,7 @@ const Division = () => {
         e.preventDefault();
         const data = {
             role_id: currentUser?.role_id,
-            department_name_ru: currentUser?.department_name_ru,
-            department_name_uz: currentUser?.department_name_uz,
+            department_name: currentUser?.department_name,
         };
 
         PostDataTokenJson(`api/department/update/${currentUser?.dept_id}`, data)
@@ -123,7 +120,7 @@ const Division = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
@@ -132,11 +129,7 @@ const Division = () => {
                                                 ? "Выбирите роль:"
                                                 : "Rol tanlang:"
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {roles?.map((item) => (
                                             <Option
@@ -145,9 +138,7 @@ const Division = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item?.role_name_ru
-                                                    : item?.role_name_uz}
+                                                {item?.role_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -156,25 +147,8 @@ const Division = () => {
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Название отдела (uz)"
-                                                : "Bo'lim nomi (uz)"
-                                        }
                                         onChange={(e) =>
-                                            setDepartment_name_uz(
-                                                e.target.value
-                                            )
-                                        }
-                                    />
-                                </div>
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        color="blue"
-                                        onChange={(e) =>
-                                            setDepartment_name_ru(
-                                                e.target.value
-                                            )
+                                            setDepartment_name(e.target.value)
                                         }
                                         label={
                                             language == "ru"
@@ -230,22 +204,18 @@ const Division = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => UpdateUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Select
                                         color="blue"
                                         label={
                                             language == "ru"
                                                 ? "Выбрать роль : " +
-                                                  currentUser?.role_name_ru
+                                                  currentUser?.role_name
                                                 : "Rol tanlash : " +
-                                                  currentUser?.role_name_uz
+                                                  currentUser?.role_name
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.role_name_ru
-                                                : role?.role_name_uz
-                                        }
+                                        value={role?.role_name}
                                     >
                                         {roles?.map((item, index) => (
                                             <Option
@@ -258,34 +228,12 @@ const Division = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item.role_name_ru
-                                                    : item.role_name_uz}
+                                                {item.role_name}
                                             </Option>
                                         ))}
                                     </Select>
                                 </div>
 
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        defaultValue={
-                                            currentUser?.department_name_uz
-                                        }
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["department_name_uz"]:
-                                                    e.target.value,
-                                            }))
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Название отдела (uz)"
-                                                : "Bo'limning nomlanishi (uz)"
-                                        }
-                                    />
-                                </div>
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         color="blue"
@@ -295,7 +243,7 @@ const Division = () => {
                                         onChange={(e) =>
                                             setCurrentUser((prev) => ({
                                                 ...prev,
-                                                ["department_name_ru"]:
+                                                ["department_name"]:
                                                     e.target.value,
                                             }))
                                         }
@@ -329,8 +277,8 @@ const Division = () => {
                                     <span>
                                         {" "}
                                         {language == "ru"
-                                            ? Add.rutrue
-                                            : Add.uztrue}
+                                            ? Edit.rutrue
+                                            : Edit.uztrue}
                                     </span>
                                 </Button>
                             </div>
@@ -435,9 +383,7 @@ const Division = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.role_name_ru
-                                                : item?.role_name_uz}
+                                            {item?.role_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -446,9 +392,7 @@ const Division = () => {
                                             color="blue-gray"
                                             className="font-normal"
                                         >
-                                            {language == "ru"
-                                                ? item?.department_name_ru
-                                                : item?.department_name_uz}
+                                            {item?.department_name}
                                         </Typography>
                                     </td>
 

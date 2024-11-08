@@ -95,7 +95,7 @@ const Koyk = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="text-theme-text bg-theme-bg" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -211,9 +211,7 @@ const Koyk = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.type_name_ru
-                                                : item?.type_name_uz}
+                                            {item?.type_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">

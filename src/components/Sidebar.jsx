@@ -7,12 +7,14 @@ import { IoPeopleSharp } from "react-icons/io5";
 import { MdMedicalServices } from "react-icons/md";
 import { FaGripfire } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
-import { RiBuilding2Fill } from "react-icons/ri";
+import { RiBuilding2Fill, RiMenuUnfold3Fill } from "react-icons/ri";
 import { IoIosSettings } from "react-icons/io";
 import { RiGuideFill } from "react-icons/ri";
 import { RiHomeOfficeFill } from "react-icons/ri";
 import { FaHome } from "react-icons/fa";
 import { VscSymbolMethod } from "react-icons/vsc";
+
+import { RiMenuUnfold4Fill } from "react-icons/ri";
 
 import { BiSolidSelectMultiple } from "react-icons/bi";
 
@@ -43,11 +45,10 @@ function Icon({ id, open }) {
     );
 }
 
-const Sidebar = () => {
+const Sidebar = ({ active, setActive }) => {
     const [sidebar, setSidebar] = useState(true);
     const url = useLocation();
     const currenurl = url.pathname;
-    console.log(currenurl);
 
     const [open, setOpen] = React.useState(0);
 
@@ -57,9 +58,9 @@ const Sidebar = () => {
         <div
             className={`${
                 sidebar ? "w-80" : "w-25"
-            } transition-all duration-300  text-white p-3 px-6  min-h-[120vh] bg-white`}
+            } transition-all duration-300  text-white p-3 px-6  min-h-[120vh] bg-theme-bg text-theme-text`}
         >
-            <div className="h-[70px] text-main-green py-3">
+            <div className="h-[70px] text-main-green py-3 hidden md:block">
                 {!sidebar ? (
                     <div className="h-full w-full  flex justify-center">
                         <FaClinicMedical
@@ -76,9 +77,18 @@ const Sidebar = () => {
                     </h2>
                 )}
             </div>
+            <div
+                className="md:hidden text-main-green h-[70px] flex justify-start items-center"
+                onClick={() => setActive(!active)}
+            >
+                <RiMenuUnfold4Fill size={30} />
+            </div>
 
             <ul>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/"
                             ? "bg-main-green text-white"
@@ -96,6 +106,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/personal"
                             ? "bg-main-green text-white"
@@ -113,6 +126,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/division"
                             ? "bg-main-green text-white"
@@ -130,6 +146,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/service"
                             ? "bg-main-green text-white"
@@ -147,6 +166,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/analyze"
                             ? "bg-main-green text-white"
@@ -164,6 +186,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/visits"
                             ? "bg-main-green text-white"
@@ -191,7 +216,7 @@ const Sidebar = () => {
                             ? "bg-main-green text-white"
                             : currenurl == "/koyk"
                             ? "bg-main-green text-white"
-                            : "text-main-green bg-white"
+                            : "text-main-green"
                     }`}
                 >
                     <p
@@ -208,7 +233,9 @@ const Sidebar = () => {
                             >
                                 <Link
                                     to={"/objects"}
-                                    onClick={() => handleOpen(2)}
+                                    onClick={() => {
+                                        handleOpen(2);
+                                    }}
                                     className="w-full flex justify-between"
                                 >
                                     Объекты
@@ -217,6 +244,7 @@ const Sidebar = () => {
                                 <AccordionBody>
                                     <ul className="text-white flex flex-col gap-2">
                                         <Link
+                                            onClick={() => setActive(!active)}
                                             className={`py-1 px-1 rounded-md ${
                                                 currenurl == "/objects"
                                                     ? "bg-white text-main-green "
@@ -227,6 +255,7 @@ const Sidebar = () => {
                                             Объекты
                                         </Link>
                                         <Link
+                                            onClick={() => setActive(!active)}
                                             className={`py-1 px-1 rounded-md ${
                                                 currenurl == "/palats"
                                                     ? "bg-white text-main-green "
@@ -237,6 +266,7 @@ const Sidebar = () => {
                                             Палаты
                                         </Link>
                                         <Link
+                                            onClick={() => setActive(!active)}
                                             className={`py-1 px-1 rounded-md ${
                                                 currenurl == "/beds"
                                                     ? "bg-white text-main-green "
@@ -247,6 +277,7 @@ const Sidebar = () => {
                                             Типы
                                         </Link>
                                         <Link
+                                            onClick={() => setActive(!active)}
                                             className={`py-1 px-1 rounded-md ${
                                                 currenurl == "/koyk"
                                                     ? "bg-white text-main-green "
@@ -265,6 +296,9 @@ const Sidebar = () => {
                     </p>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/method"
                             ? "bg-main-green text-white"
@@ -283,6 +317,9 @@ const Sidebar = () => {
                 </li>
 
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/share"
                             ? "bg-main-green text-white"
@@ -300,6 +337,9 @@ const Sidebar = () => {
                     </Link>
                 </li>
                 <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/actions"
                             ? "bg-main-green text-white"
@@ -316,7 +356,16 @@ const Sidebar = () => {
                         {sidebar ? "Action" : ""}
                     </Link>
                 </li>
-                <li className="mb-4">
+                <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/warehouse"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
                     <Link
                         to="/warehouse"
                         className={`flex gap-2 justify-${

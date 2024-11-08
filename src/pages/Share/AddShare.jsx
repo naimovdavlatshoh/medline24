@@ -16,14 +16,14 @@ import { Add } from "../../utils/constants";
 export function AddShare({ changeStatus, language }) {
     const [size, setSize] = React.useState(null);
 
-    const [nameuz, setNameuz] = useState("");
+    const [name, setName] = useState("");
     const [share, setShare] = useState(0);
 
     const handleOpen = (value) => setSize(value);
 
     const AddUser = (e) => {
         const data = {
-            full_name_uz: nameuz,
+            full_name: name,
             share: share,
             share_type: 1,
         };
@@ -48,13 +48,14 @@ export function AddShare({ changeStatus, language }) {
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
+                className="bg-theme-bg text-theme-text"
             >
                 <DialogHeader>
                     {language == "ru" ? "Добавить метод" : "Metod qo'shish"}
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex flex-col md:flex-row gap-5">
                             <div className="w-full">
                                 <div className="mb-3">
                                     <Input
@@ -62,7 +63,7 @@ export function AddShare({ changeStatus, language }) {
                                             language == "ru" ? "имя :" : "ism :"
                                         }
                                         onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

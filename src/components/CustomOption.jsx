@@ -66,7 +66,7 @@ export function CustomOption({ item, changeStatus }) {
             <Button onClick={handleOpen}>
                 {language == "ru" ? "нажмите" : "bosing"}
             </Button>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru"
                         ? "нормы для этого анализа"
@@ -75,9 +75,32 @@ export function CustomOption({ item, changeStatus }) {
                 <DialogBody>
                     {item?.option?.map((i, index) => (
                         <div
-                            className="w-full flex gap-2 justify-center"
+                            className="w-full flex flex-col md:flex-row gap-2 justify-center"
                             key={index}
                         >
+                            <div className="w-1/3">
+                                {editIndex === index ? (
+                                    <input
+                                        type="text"
+                                        defaultValue={
+                                            editedFields.analizy_option_name
+                                        }
+                                        onChange={(e) =>
+                                            handleInputChange(
+                                                e,
+                                                "analizy_option_name"
+                                            )
+                                        }
+                                        className="border rounded p-1"
+                                    />
+                                ) : (
+                                    `${
+                                        language == "ru"
+                                            ? "Названия(ru)"
+                                            : "Nomi(ru)"
+                                    } : ${i.analizy_option_name}`
+                                )}
+                            </div>
                             <div className="w-1/3">
                                 {editIndex === index ? (
                                     <input
@@ -94,52 +117,7 @@ export function CustomOption({ item, changeStatus }) {
                                     } : ${i.standart}`
                                 )}
                             </div>
-                            <div className="w-1/3">
-                                {editIndex === index ? (
-                                    <input
-                                        type="text"
-                                        defaultValue={
-                                            editedFields.analizy_option_name_ru
-                                        }
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                e,
-                                                "analizy_option_name_ru"
-                                            )
-                                        }
-                                        className="border rounded p-1"
-                                    />
-                                ) : (
-                                    `${
-                                        language == "ru"
-                                            ? "названия(ru)"
-                                            : "nomi(ru)"
-                                    } : ${i.analizy_option_name_ru}`
-                                )}
-                            </div>
-                            <div className="w-1/3">
-                                {editIndex === index ? (
-                                    <input
-                                        type="text"
-                                        defaultValue={
-                                            editedFields.analizy_option_name_uz
-                                        }
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                e,
-                                                "analizy_option_name_uz"
-                                            )
-                                        }
-                                        className="border rounded p-1"
-                                    />
-                                ) : (
-                                    `${
-                                        language == "ru"
-                                            ? "названия(uz)"
-                                            : "nomi(uz)"
-                                    } : ${i.analizy_option_name_uz}`
-                                )}
-                            </div>
+
                             <div className="w-1/3">
                                 {editIndex === index ? (
                                     <input

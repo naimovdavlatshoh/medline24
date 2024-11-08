@@ -66,6 +66,7 @@ export function EditPalat({ item, changeStatus, language }) {
             </Tooltip>
 
             <Dialog
+            className="text-theme-text bg-theme-bg"
                 open={size === "lg"}
                 size={size || "md"}
                 handler={handleOpen}
@@ -77,7 +78,7 @@ export function EditPalat({ item, changeStatus, language }) {
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex gap-5 flex-col md:flex-row">
                             <div className="w-1/2 flex flex-col gap-3">
                                 <Select
                                     label={
@@ -93,9 +94,7 @@ export function EditPalat({ item, changeStatus, language }) {
                                                 setObject(t.object_id)
                                             }
                                         >
-                                            {language == "ru"
-                                                ? t?.object_name_ru
-                                                : t?.object_name_uz}
+                                            {t?.object_name}
                                         </Option>
                                     ))}
                                 </Select>
@@ -109,9 +108,7 @@ export function EditPalat({ item, changeStatus, language }) {
                                             key={t.dept_id}
                                             onClick={() => setType(t.dept_id)}
                                         >
-                                            {language == "ru"
-                                                ? t?.department_name_ru
-                                                : t?.department_name_uz}
+                                            {t?.department_name}
                                         </Option>
                                     ))}
                                 </Select>

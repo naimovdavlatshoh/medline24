@@ -60,10 +60,8 @@ const Analyze = () => {
     const [currentUser, setCurrentUser] = useState(null);
     const [search, setSearch] = useState("");
     const [searchData, setSearchData] = useState([]);
-    const [analyzeru, setAnalyzeru] = useState("");
-    const [analyzeuz, setAnalyzeuz] = useState("");
-    const [analizy_option_name_ru, setAnalizy_option_name_ru] = useState("");
-    const [analizy_option_name_uz, setAnalizy_option_name_uz] = useState("");
+    const [analyze, setAnalyze] = useState("");
+    const [analizy_option_name, setAnalizy_option_name] = useState("");
     const [standart, setStandart] = useState("");
     const [unit_of_measurement, setUnit_of_measurement] = useState("");
     const [code, setCode] = useState("");
@@ -117,8 +115,7 @@ const Analyze = () => {
         e.preventDefault();
         const data = {
             service_id: role.service_id,
-            analizy_name_ru: analyzeru,
-            analizy_name_uz: analyzeuz,
+            analizy_name: analyze,
             analizy_code: code,
         };
 
@@ -134,8 +131,7 @@ const Analyze = () => {
     const AddOption = (e) => {
         e.preventDefault();
         const data = {
-            analizy_option_name_ru: analizy_option_name_ru,
-            analizy_option_name_uz: analizy_option_name_uz,
+            analizy_option_name: analizy_option_name,
             standart: standart,
             unit_of_measurement: unit_of_measurement,
         };
@@ -153,8 +149,7 @@ const Analyze = () => {
         e.preventDefault();
         const data = {
             service_id: currentUser.service_id,
-            analizy_name_ru: currentUser.analizy_name_ru,
-            analizy_name_uz: currentUser.analizy_name_uz,
+            analizy_name: currentUser.analizy_name,
             analizy_code: currentUser.analizy_code,
             standart: "asbdvhbshfbvsaz",
             unit_of_measurement: "ansbdvhab dfsjkn",
@@ -185,7 +180,11 @@ const Analyze = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -197,7 +196,7 @@ const Analyze = () => {
                         className="mr-1"
                     >
                         <span>
-                            {language == "re" ? Delete.rufalse : Delete.uzfalse}
+                            {language == "ru" ? Delete.rufalse : Delete.uzfalse}
                         </span>
                     </Button>
                     <Button
@@ -206,7 +205,7 @@ const Analyze = () => {
                         onClick={DeleteFinish}
                     >
                         <span>
-                            {language == "re" ? Delete.rutrue : Delete.uztrue}
+                            {language == "ru" ? Delete.rutrue : Delete.uztrue}
                         </span>
                     </Button>
                 </DialogFooter>
@@ -215,7 +214,7 @@ const Analyze = () => {
                 size="xs"
                 open={open2}
                 handler={handleOpen2}
-                className="p-4"
+                className="p-4 bg-theme-bg text-theme-text"
             >
                 <DialogHeader className="relative m-0 block">
                     <Typography variant="h4" color="blue-gray">
@@ -255,7 +254,7 @@ const Analyze = () => {
                                 className: "hidden",
                             }}
                             onChange={(e) =>
-                                setAnalizy_option_name_ru(e.target.value)
+                                setAnalizy_option_name(e.target.value)
                             }
                         />
                     </div>
@@ -269,22 +268,6 @@ const Analyze = () => {
                                 ? "название опции анализа uz"
                                 : "tahlil variantining nomi uz"}
                         </Typography>
-                        <Input
-                            color="gray"
-                            size="lg"
-                            placeholder=""
-                            name="name"
-                            className="placeholder:opacity-100 focus:!border-t-gray-900"
-                            containerProps={{
-                                className: "!min-w-full",
-                            }}
-                            labelProps={{
-                                className: "hidden",
-                            }}
-                            onChange={(e) =>
-                                setAnalizy_option_name_uz(e.target.value)
-                            }
-                        />
                     </div>
 
                     <div className="flex gap-4">
@@ -359,7 +342,7 @@ const Analyze = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/2 flex flex-col gap-4">
                                     <Select
                                         color="blue"
@@ -368,11 +351,7 @@ const Analyze = () => {
                                                 ? "Выбирите Услуга:"
                                                 : "Xizmatni tanlang"
                                         }
-                                        value={
-                                            language == "ru"
-                                                ? role?.service_name_ru
-                                                : role?.service_name_uz
-                                        }
+                                        value={role?.service_name}
                                     >
                                         {roles?.map((item) => (
                                             <Option
@@ -381,9 +360,7 @@ const Analyze = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item.service_name_ru
-                                                    : item.service_name_uz}
+                                                {item.service_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -417,24 +394,13 @@ const Analyze = () => {
                                 <div className="w-1/2 flex flex-col gap-4">
                                     <Input
                                         onChange={(e) =>
-                                            setAnalyzeru(e.target.value)
+                                            setAnalyze(e.target.value)
                                         }
                                         color="blue"
                                         label={
                                             language == "ru"
                                                 ? "Название (ру):"
                                                 : "Nomlanishi (ru):"
-                                        }
-                                    />
-                                    <Input
-                                        onChange={(e) =>
-                                            setAnalyzeuz(e.target.value)
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Название (uz):"
-                                                : "Nomlanishi (uz):"
                                         }
                                     />
                                 </div>
@@ -484,7 +450,7 @@ const Analyze = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => UpdateUser(e)}>
-                            <div className="flex justify-between gap-3 mb-5">
+                            <div className="flex flex-col md:flex-row justify-between gap-3 mb-5">
                                 <div className="w-1/2 flex flex-col gap-4">
                                     <Select
                                         color="blue"
@@ -493,11 +459,7 @@ const Analyze = () => {
                                                 ? "Выбирите Услуга:"
                                                 : "Xizmatni tanlang"
                                         }
-                                        defaultValue={
-                                            language == "ru"
-                                                ? currentUser?.service_name_ru
-                                                : currentUser?.service_name_uz
-                                        }
+                                        defaultValue={currentUser?.service_name}
                                     >
                                         {roles?.map((item) => (
                                             <Option
@@ -510,9 +472,7 @@ const Analyze = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {language == "ru"
-                                                    ? item.service_name_ru
-                                                    : item.service_name_uz}
+                                                {item.service_name}
                                             </Option>
                                         ))}
                                     </Select>
@@ -538,7 +498,7 @@ const Analyze = () => {
                                         onChange={(e) =>
                                             setCurrentUser((prev) => ({
                                                 ...prev,
-                                                ["analizy_name_ru"]:
+                                                ["analizy_name"]:
                                                     e.target.value,
                                             }))
                                         }
@@ -548,31 +508,7 @@ const Analyze = () => {
                                                 ? "Название (ру):"
                                                 : "Nomi (ru)"
                                         }
-                                        defaultValue={
-                                            language == "ru"
-                                                ? currentUser?.analizy_name_ru
-                                                : currentUser?.analizy_name_uz
-                                        }
-                                    />
-                                    <Input
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["analizy_name_uz"]:
-                                                    e.target.value,
-                                            }))
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "Название (uz):"
-                                                : "Nomi (uz)"
-                                        }
-                                        defaultValue={
-                                            language == "ru"
-                                                ? currentUser?.analizy_name_ru
-                                                : currentUser?.analizy_name_uz
-                                        }
+                                        defaultValue={currentUser?.analizy_name}
                                     />
                                 </div>
                             </div>
@@ -705,9 +641,7 @@ const Analyze = () => {
                                                     color="blue-gray"
                                                     className="font-bold"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.service_name_ru
-                                                        : item?.service_name_uz}
+                                                    {item?.service_name}
                                                 </Typography>
                                             </td>
                                             <td className="p-4">
@@ -725,9 +659,7 @@ const Analyze = () => {
                                                     color="blue-gray"
                                                     className="font-normal"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.analizy_name_ru
-                                                        : item?.analizy_name_uz}
+                                                    {item?.analizy_name}
                                                 </Typography>
                                             </td>
                                             <td className="p-4">
@@ -807,9 +739,7 @@ const Analyze = () => {
                                                 color="blue-gray"
                                                 className="font-bold"
                                             >
-                                                {language == "ru"
-                                                    ? item?.service_name_ru
-                                                    : item?.service_name_uz}
+                                                {item?.service_name}
                                             </Typography>
                                         </td>
                                         <td className="p-4">
@@ -827,9 +757,7 @@ const Analyze = () => {
                                                 color="blue-gray"
                                                 className="font-normal"
                                             >
-                                                {language == "ru"
-                                                    ? item?.analizy_name_ru
-                                                    : item?.analizy_name_uz}
+                                                {item?.analizy_name}
                                             </Typography>
                                         </td>
                                         <td className="p-4">

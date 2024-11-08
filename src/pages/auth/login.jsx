@@ -31,7 +31,7 @@ const Login = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-back">
             <div className="flex flex-col md:flex-row bg-white shadow-xl rounded-lg overflow-hidden max-w-4xl w-full">
-                <div className="md:w-1/2 bg-gradient-to-tr from-blue-200 to-blue-500 p-8 flex flex-col items-center justify-center">
+                <div className="md:w-1/2 bg-login p-8 flex flex-col items-center justify-center">
                     <img
                         src={LoginImg} // Replace with actual image
                         alt="Doctor"
@@ -41,7 +41,7 @@ const Login = () => {
 
                 {/* Right Form Section */}
                 <div className="md:w-1/2 flex flex-col p-8 justify-center">
-                    <h2 className="text-2xl font-bold mb-6 text-blue-700">
+                    <h2 className="text-2xl font-bold mb-6 text-[#0bc403]">
                         Давайте защитим себя и тех, кто вас окружает, проведя
                         вакцинацию💉
                     </h2>
@@ -55,7 +55,7 @@ const Login = () => {
                             onChange={(e) => setLogin(e.target.value)}
                             type="text"
                             placeholder="логин"
-                            className="w-full p-2 border border-gray-300 rounded-md text-black"
+                            className="w-full p-2 border border-gray-300 rounded-md text-black outline-[#0bc403]"
                         />
                     </div>
                     {/* Mobile Number Input */}
@@ -68,13 +68,13 @@ const Login = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 type={passwordstatus ? "password" : "text"}
                                 placeholder="пароль"
-                                className="w-full p-2 border border-gray-300 rounded-md text-black"
+                                className="w-full p-2 border border-gray-300 rounded-md text-black outline-[#0bc403]"
                             />
                             <button
                                 onClick={() =>
                                     setPasswordstatus(!passwordstatus)
                                 }
-                                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                                className="bg-[#0bc403] text-white px-4 py-2 rounded-md"
                             >
                                 {passwordstatus ? <FaEye /> : <FaEyeSlash />}
                             </button>
@@ -89,18 +89,11 @@ const Login = () => {
                                 : true
                         }
                         onClick={SignIn}
-                        className="bg-blue-600 text-white w-full py-3 rounded-md"
+                        className="bg-[#0bc403] text-white w-full py-3 rounded-md"
                     >
                         войти
                     </Button>
                     {/* Already Registered */}
-                    <div className="text-center mt-4">
-                        <p className="text-sm">
-                            <a href="#" className="text-blue-500 underline">
-                                Check your status
-                            </a>
-                        </p>
-                    </div>
                 </div>
             </div>
             <ToastContainer />

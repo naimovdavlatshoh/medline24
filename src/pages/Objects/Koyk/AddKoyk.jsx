@@ -70,6 +70,7 @@ export function AddKoyk_({ changeStatus, language }) {
             </Button>
 
             <Dialog
+                className="text-theme-text bg-theme-bg"
                 open={size === "lg"}
                 size={size || "md"}
                 handler={handleOpen}
@@ -79,8 +80,8 @@ export function AddKoyk_({ changeStatus, language }) {
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
-                            <div className="w-1/2 flex flex-col gap-3">
+                        <div className="flex gap-5 flex-col md:flex-row">
+                            <div className="w-1/2 flex  flex-col md:flex-row gap-3">
                                 <Select
                                     label={
                                         language == "ru"
@@ -95,9 +96,7 @@ export function AddKoyk_({ changeStatus, language }) {
                                                 setObject(t.object_id)
                                             }
                                         >
-                                            {language == "ru"
-                                                ? t?.object_name_ru
-                                                : t?.object_name_uz}
+                                            {t?.object_name}
                                         </Option>
                                     ))}
                                 </Select>
@@ -115,9 +114,7 @@ export function AddKoyk_({ changeStatus, language }) {
                                                 setKoykType(t.koyka_type_id)
                                             }
                                         >
-                                            {language == "ru"
-                                                ? t?.type_name_ru
-                                                : t?.type_name_uz}
+                                            {t?.type_name}
                                         </Option>
                                     ))}
                                 </Select>

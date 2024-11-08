@@ -53,6 +53,8 @@ const Object = () => {
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
 
+    console.log(users);
+
     useEffect(() => {
         const lang = localStorage.getItem("lang");
         if (lang) {
@@ -85,7 +87,7 @@ const Object = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -202,7 +204,7 @@ const Object = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language=="ru"?item?.object_name_ru:item?.object_name_uz}
+                                            {item?.object_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">
@@ -234,7 +236,7 @@ const Object = () => {
                                         <IconButton
                                             variant="text"
                                             onClick={() =>
-                                                deleteData(item.free_visit_id)
+                                                deleteData(item.object_id)
                                             }
                                         >
                                             <TrashIcon

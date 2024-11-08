@@ -21,8 +21,7 @@ export function EditObject({ item, changeStatus, language }) {
     console.log(item);
 
     const [flour, setFlour] = useState(item?.total_floors);
-    const [nameru, setNameru] = useState(item?.object_name_ru);
-    const [nameuz, setNameuz] = useState(item?.object_name_uz);
+    const [name, setName] = useState(item?.object_name);
 
     const handleOpen = (value) => setSize(value);
 
@@ -34,8 +33,7 @@ export function EditObject({ item, changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            object_name_ru: nameru,
-            object_name_uz: nameuz,
+            object_name: name,
             total_floors: flour,
         };
 
@@ -63,6 +61,7 @@ export function EditObject({ item, changeStatus, language }) {
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
+                className="text-theme-text bg-theme-bg"
             >
                 <DialogHeader>
                     {language == "ru?"
@@ -71,7 +70,7 @@ export function EditObject({ item, changeStatus, language }) {
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex gap-5 flex-col md:flex-row">
                             <div className="w-full">
                                 <div className="mb-3 w-1/2">
                                     <Input
@@ -88,27 +87,14 @@ export function EditObject({ item, changeStatus, language }) {
                                 </div>
                                 <div className="mb-3">
                                     <Input
-                                        defaultValue={item?.object_name_ru}
+                                        defaultValue={item?.object_name}
                                         label={
                                             language == "ru"
                                                 ? "Наименование здания (ru):"
                                                 : "Bino nomi (ru):"
                                         }
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        defaultValue={item?.object_name_uz}
-                                        label={
-                                            language == "ru"
-                                                ? "Наименование здания (uz):"
-                                                : "Bino nomi (uz):"
-                                        }
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

@@ -203,9 +203,7 @@ const Warehouse = () => {
                                                     color="blue-gray"
                                                     className="font-bold"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.warehouse_name_ru
-                                                        : item?.warehouse_name_uz}
+                                                    {item?.warehouse_name}
                                                 </Typography>
                                             </td>
                                             <td className="p-4">
@@ -214,9 +212,9 @@ const Warehouse = () => {
                                                     color="blue-gray"
                                                     className="font-bold"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.warehouse_status_name_ru
-                                                        : item?.warehouse_status_name_uz}
+                                                    {
+                                                        item?.warehouse_status_name
+                                                    }
                                                 </Typography>
                                             </td>
                                             <td className="p-4">
@@ -225,9 +223,9 @@ const Warehouse = () => {
                                                     color="blue-gray"
                                                     className="font-bold"
                                                 >
-                                                    {language == "ru"
-                                                        ? item?.warehouse_status_name_ru
-                                                        : item?.warehouse_status_name_uz}
+                                                    {
+                                                        item?.warehouse_status_name
+                                                    }
                                                 </Typography>
                                             </td>
 

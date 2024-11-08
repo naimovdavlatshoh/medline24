@@ -83,7 +83,7 @@ const Share = () => {
 
     return (
         <div>
-            <Dialog open={open} handler={handleOpen}>
+            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -200,9 +200,7 @@ const Share = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {language == "ru"
-                                                ? item?.full_name_ru
-                                                : item?.full_name_uz}
+                                            {item?.full_name}
                                         </Typography>
                                     </td>
                                     <td className="p-4">

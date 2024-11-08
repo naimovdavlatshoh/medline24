@@ -15,15 +15,13 @@ import { GetDataSimple, PostDataTokenJson } from "../../services";
 export function AddMethod({ changeStatus }) {
     const [size, setSize] = React.useState(null);
 
-    const [nameru, setNameru] = useState("");
-    const [nameuz, setNameuz] = useState("");
+    const [name, setName] = useState("");
 
     const handleOpen = (value) => setSize(value);
 
     const AddUser = (e) => {
         const data = {
-            method_name_ru: nameru,
-            method_name_uz: nameuz,
+            method_name: name,
         };
 
         PostDataTokenJson("api/injmethod/create", data)
@@ -43,6 +41,7 @@ export function AddMethod({ changeStatus }) {
             </Button>
 
             <Dialog
+            className="text-theme-text bg-theme-bg"
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
@@ -57,15 +56,7 @@ export function AddMethod({ changeStatus }) {
                                         label="
                                         Название (ru)"
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
-                                        }
-                                    />
-                                </div>
-                                <div className="mb-3">
-                                    <Input
-                                        label="Название (uz)"
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

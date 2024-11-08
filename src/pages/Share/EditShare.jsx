@@ -19,14 +19,14 @@ import { Edit } from "../../utils/constants";
 export function EditShare({ item, changeStatus, language }) {
     const [size, setSize] = React.useState(null);
 
-    const [nameuz, setNameuz] = useState(item?.full_name_uz);
+    const [name, setName] = useState(item?.full_name);
     const [share, setShare] = useState(item?.share);
 
     const handleOpen = (value) => setSize(value);
 
     const AddUser = (e) => {
         const data = {
-            full_name_uz: nameuz,
+            full_name: name,
             share: share,
             share_type: 1,
         };
@@ -49,6 +49,7 @@ export function EditShare({ item, changeStatus, language }) {
             </IconButton>
 
             <Dialog
+                className="text-theme-text bg-theme-bg"
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}
@@ -60,16 +61,16 @@ export function EditShare({ item, changeStatus, language }) {
                 </DialogHeader>
                 <DialogBody>
                     <div className="w-full">
-                        <div className="flex gap-5">
+                        <div className="flex flex-col md:flex-row gap-5">
                             <div className="w-full">
                                 <div className="mb-3">
                                     <Input
                                         label={
                                             language == "ru" ? "имя :" : "ism :"
                                         }
-                                        defaultValue={nameuz}
+                                        defaultValue={name}
                                         onChange={(e) =>
-                                            setNameuz(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>

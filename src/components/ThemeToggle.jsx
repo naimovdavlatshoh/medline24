@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { FiSun } from "react-icons/fi";
 import { IoMoonOutline } from "react-icons/io5";
 
-function ThemeToggle() {
+function ThemeToggle({ setTheme1 }) {
     const [theme, setTheme] = useState(
         localStorage.getItem("theme") || "light"
     );
@@ -18,6 +18,7 @@ function ThemeToggle() {
 
     const toggleTheme = () => {
         setTheme(theme === "light" ? "dark" : "light");
+        setTheme1(theme === "light" ? "dark" : "light");
     };
 
     return (

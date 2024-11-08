@@ -5,9 +5,7 @@
 .bg-back {
     background: url(./assets/images/background.jpg);
     background-size: cover;
-    color: #e4eff7;
-    color: #f1f3ef;
-
+    color: #f2f3f5;
 }
 
 /* index.css or global styles */
@@ -19,4 +17,62 @@
 .dark {
     --bg-color: theme("colors.primary-dark");
     --text-color: theme("colors.secondary-light");
+}
+
+/* Loader.css */
+
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ffffff; /* Adjust as needed */
+}
+
+.cross {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    background-color: transparent;
+    animation: rotate 1.2s linear infinite;
+}
+
+.cross::before,
+.cross::after {
+    content: "";
+    position: absolute;
+    background-color: #3498db; /* Adjust for your theme color */
+    border-radius: 2px;
+}
+
+.cross::before {
+    width: 100%;
+    height: 10px;
+    top: 15px;
+    left: 0;
+}
+
+.cross::after {
+    width: 10px;
+    height: 100%;
+    left: 15px;
+    top: 0;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.bg-login {
+    background: rgb(224, 224, 224);
+    background: linear-gradient(
+        357deg,
+        rgba(224, 224, 224, 1) 0%,
+        rgba(11, 196, 3, 1) 33%
+    );
 }

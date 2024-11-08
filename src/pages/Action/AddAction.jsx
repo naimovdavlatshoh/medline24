@@ -17,8 +17,7 @@ const AddAction = () => {
     const [koykprices, setKoykprices] = useState([]);
     const [services, setServices] = useState([]);
 
-    const [nameuz, setNameuz] = useState("");
-    const [nameru, setNameru] = useState("");
+    const [name, setName] = useState("");
     const [startdate, setStartdate] = useState("");
     const [enddate, setEnddate] = useState("");
     const [aksiyaItems, setAksiyaItems] = useState([
@@ -60,8 +59,7 @@ const AddAction = () => {
     const AddUser = (e) => {
         e.preventDefault();
         const data = {
-            aksiya_name_ru: nameru,
-            aksiya_name_uz: nameuz,
+            aksiya_name: name,
             start_date: startdate,
             end_date: enddate,
             aksiya_item: aksiyaItems,
@@ -103,11 +101,11 @@ const AddAction = () => {
                     </DialogHeader>
                     <DialogBody>
                         <form onSubmit={(e) => AddUser(e)}>
-                            <div className="flex flex-col justify-between gap-3 mb-5">
-                                <div className="w-full flex  gap-4">
+                            <div className="flex flex-col  justify-between gap-3 mb-5">
+                                <div className="w-full flex flex-col md:flex-row gap-4">
                                     <Input
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
+                                            setName(e.target.value)
                                         }
                                         color="blue"
                                         label={
@@ -116,19 +114,8 @@ const AddAction = () => {
                                                 : "aksiya nomi (ru)"
                                         }
                                     />
-                                    <Input
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "название акций (uz)"
-                                                : "aksiya nomi (uz)"
-                                        }
-                                    />
                                 </div>
-                                <div className="w-full flex  gap-4">
+                                <div className="w-full flex flex-col md:flex-row gap-4">
                                     <Input
                                         type="date"
                                         onChange={(e) =>
@@ -157,7 +144,7 @@ const AddAction = () => {
                                 <div className="w-full flex flex-col items-center gap-4">
                                     {aksiyaItems.map((aksiyaItem, index) => (
                                         <div
-                                            className="w-full flex gap-4"
+                                            className="w-full flex flex-col md:flex-row gap-4"
                                             key={index}
                                         >
                                             <Select
@@ -167,11 +154,7 @@ const AddAction = () => {
                                                         ? "Выберите услуга:"
                                                         : "Xizmat Tanlang:"
                                                 }
-                                                value={
-                                                    language === "ru"
-                                                        ? aksiyaItem?.service_name_ru
-                                                        : aksiyaItem?.service_name_uz
-                                                }
+                                                value={aksiyaItem?.service_name}
                                             >
                                                 {services?.map((item, idx) => (
                                                     <Option
@@ -187,9 +170,7 @@ const AddAction = () => {
                                                         }
                                                         className="text-theme-text bg-theme-bg mb-2"
                                                     >
-                                                        {language === "ru"
-                                                            ? item?.service_name_ru
-                                                            : item?.service_name_uz}
+                                                        {item?.service_name}
                                                     </Option>
                                                 ))}
                                             </Select>
@@ -200,11 +181,7 @@ const AddAction = () => {
                                                         ? "Выберите койки:"
                                                         : "Koyka Tanlang:"
                                                 }
-                                                value={
-                                                    language === "ru"
-                                                        ? aksiyaItem.type_name_ru
-                                                        : aksiyaItem.type_name_uz
-                                                }
+                                                value={aksiyaItem.type_name}
                                             >
                                                 {koykprices?.map((item) => (
                                                     <Option
@@ -220,9 +197,7 @@ const AddAction = () => {
                                                         }
                                                         className="text-theme-text bg-theme-bg mb-2"
                                                     >
-                                                        {language === "ru"
-                                                            ? item?.type_name_ru
-                                                            : item?.type_name_uz}
+                                                        {item?.type_name}
                                                     </Option>
                                                 ))}
                                             </Select>

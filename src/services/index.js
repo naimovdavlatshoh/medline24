@@ -11,6 +11,7 @@ export const PostData = async (url, data) => {
     const response = await axios.post(BASE_URL + url, data);
     return response;
 };
+
 export const PostDataToken = async (url, data) => {
     const response = await axios.post(BASE_URL + url, data, {
         headers: {

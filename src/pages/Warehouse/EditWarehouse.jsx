@@ -20,8 +20,7 @@ export function EditWarehouse({ item, changeStatus, language }) {
     const [size, setSize] = React.useState(null);
     console.log(item);
 
-    const [nameru, setNameru] = useState(item?.warehouse_name_ru);
-    const [nameuz, setNameuz] = useState(item?.warehouse_name_uz);
+    const [name, setName] = useState(item?.warehouse_name);
     const [mainStatus, setMainStatus] = useState(1);
     const [wareStatus, setWareStatus] = useState(1);
     const [externalType, setexternalType] = useState(1);
@@ -32,8 +31,7 @@ export function EditWarehouse({ item, changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            warehouse_name_ru: nameru,
-            warehouse_name_uz: nameuz,
+            warehouse_name: name,
             main_status: mainStatus,
             warehouse_status: wareStatus,
             external_type: externalType,
@@ -77,25 +75,13 @@ export function EditWarehouse({ item, changeStatus, language }) {
                                                 ? "имя (ru):"
                                                 : "nomi (ru)"
                                         }
-                                        defaultValue={nameru}
+                                        defaultValue={name}
                                         onChange={(e) =>
-                                            setNameru(e.target.value)
+                                            setName(e.target.value)
                                         }
                                     />
                                 </div>
-                                <div className="mb-3">
-                                    <Input
-                                        defaultValue={nameuz}
-                                        label={
-                                            language == "ru"
-                                                ? "имя (uz):"
-                                                : "nomi (uz)"
-                                        }
-                                        onChange={(e) =>
-                                            setNameuz(e.target.value)
-                                        }
-                                    />
-                                </div>
+
                                 <div className="mb-3">
                                     <Select
                                         label={

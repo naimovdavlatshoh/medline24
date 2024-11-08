@@ -18,8 +18,7 @@ import { Edit } from "../../../utils/constants";
 
 export function EditKoyk({ item, changeStatus, language }) {
     const [size, setSize] = React.useState(null);
-    const [nameuz, setNameuz] = useState(item?.type_name_uz);
-    const [nameru, setNameru] = useState(item?.type_name_ru);
+    const [name, setName] = useState(item?.type_name);
     const [price, setPrice] = useState(item?.price_of_food);
     const [localPrice, setLocalPrice] = useState(item?.koyka_local_price);
     const [touristPrice, setTouristPrice] = useState(item?.koyka_tourist_price);
@@ -39,8 +38,7 @@ export function EditKoyk({ item, changeStatus, language }) {
 
     const AddUser = (e) => {
         const data = {
-            type_name_ru: nameru,
-            type_name_uz: nameuz,
+            type_name: name,
             koyka_local_price: localPrice,
             koyka_tourist_price: touristPrice,
         };
@@ -63,6 +61,7 @@ export function EditKoyk({ item, changeStatus, language }) {
             </IconButton>
 
             <Dialog
+                className="text-theme-text bg-theme-bg"
                 open={size === "lg"}
                 size={size || "md"}
                 handler={handleOpen}
@@ -77,24 +76,13 @@ export function EditKoyk({ item, changeStatus, language }) {
                         <div className="w-full">
                             <div className="mb-3">
                                 <Input
-                                    defaultValue={nameuz}
-                                    label={
-                                        language == "ru"
-                                            ? "наимевания (uz)"
-                                            : "nomi (uz)"
-                                    }
-                                    onChange={(e) => setNameuz(e.target.value)}
-                                />
-                            </div>
-                            <div className="mb-3">
-                                <Input
-                                    defaultValue={nameru}
+                                    defaultValue={name}
                                     label={
                                         language == "ru"
                                             ? "наимевания (ru)"
                                             : "nomi (ru)"
                                     }
-                                    onChange={(e) => setNameru(e.target.value)}
+                                    onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
 
