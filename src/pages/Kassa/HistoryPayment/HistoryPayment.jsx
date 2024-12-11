@@ -1,59 +1,28 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import {
-    Button,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    Select,
-    Option,
-    DialogFooter,
-} from "@material-tailwind/react";
+import { FaEye } from "react-icons/fa";
+
 import {
     Card,
     CardHeader,
     Typography,
     CardBody,
-    Chip,
-    CardFooter,
-    Avatar,
     IconButton,
-    Tooltip,
     Input,
 } from "@material-tailwind/react";
 import { useEffect, useState } from "react";
-import {
-    DeleteData,
-    GetDataSimple,
-    PostDataTokenJson,
-} from "../../../services";
-
-import { AddObject } from "./AddObject";
-import { EditObject } from "./EditObject";
+import { GetDataSimple } from "../../../services";
 import Pagination from "../../../components/Pagination";
+import { Link } from "react-router-dom";
 
-const TABLE_HEAD = ["N", "Название", "Этажи", "Действия"];
-const TABLE_HEADUZ = ["N", "Nomi", "Qavat", "Amal"];
-import { Add, Delete, Edit } from "../../../utils/constants";
+const TABLE_HEAD = ["N", "ФИО", "Действия"];
+const TABLE_HEADUZ = ["N", "FIO", "Amal"];
 
-const Object = () => {
-    const [open, setOpen] = useState(false);
-    const [size, setSize] = useState(null);
-    const [size1, setSize1] = useState(null);
-    const handleOpen = (value) => setSize(value);
-    const handleOpen1 = (value) => {
-        setSize1(value), setStatus(!status);
-    };
-
-    const [users, setUsers] = useState([]);
+const HistoryPayment = () => {
+    const [patients, setPatients] = useState([]);
     const [status, setStatus] = useState(false);
-    const [search, setSearch] = useState("");
-    const [deleteId, setDeletedId] = useState(null);
     const [language, setLanguage] = useState("ru");
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
-
-    console.log(users);
 
     useEffect(() => {
         const lang = localStorage.getItem("lang");
@@ -63,56 +32,16 @@ const Object = () => {
     }, [language]);
 
     useEffect(() => {
-        GetDataSimple("api/object/list?page=1&limit=10").then((res) => {
-            setUsers(res?.result);
-            console.log(res?.result);
+        GetDataSimple(
+            `api/visit/ambulator/paid/history?page=${currentPage}&limit=10`
+        ).then((res) => {
+            setPatients(res?.result);
+            setTotalPages(res?.pages);
         });
     }, [status, currentPage]);
 
-    const changeStatus = () => {
-        setStatus(!status);
-    };
-
-    const DeleteFinish = () => {
-        DeleteData(`api/freevisit/delete/${deleteId}`).then((res) => {
-            setOpen(!open);
-            setStatus(!status);
-        });
-    };
-
-    const deleteData = (id) => {
-        setOpen(!open);
-        setDeletedId(id);
-    };
-
     return (
         <div>
-            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
-                <DialogHeader>
-                    {language == "ru" ? Delete.titleru : Delete.titleuz}
-                </DialogHeader>
-                <DialogFooter>
-                    <Button
-                        variant="text"
-                        color="red"
-                        onClick={() => setOpen(false)}
-                        className="mr-1"
-                    >
-                        <span>
-                            {language == "ru" ? Delete.rufalse : Delete.uzfalse}
-                        </span>
-                    </Button>
-                    <Button
-                        variant="gradient"
-                        color="green"
-                        onClick={DeleteFinish}
-                    >
-                        <span>
-                            {language == "ru" ? Delete.rutrue : Delete.uztrue}
-                        </span>
-                    </Button>
-                </DialogFooter>
-            </Dialog>
             <Card className="h-full w-full bg-theme-bg text-theme-text">
                 <CardHeader
                     floated={false}
@@ -123,8 +52,8 @@ const Object = () => {
                         <div>
                             <Typography variant="h5" color="blue-gray">
                                 {language == "ru"
-                                    ? "Список Здание"
-                                    : "Binolar ro'yxati"}
+                                    ? "История платежей"
+                                    : "To'lov tarixi"}
                             </Typography>
                         </div>
                         <div className="flex w-full shrink-0 gap-2 md:w-max">
@@ -139,10 +68,6 @@ const Object = () => {
                                     }
                                 />
                             </div>
-                            <AddObject
-                                changeStatus={changeStatus}
-                                language={language}
-                            />
                         </div>
                     </div>
                 </CardHeader>
@@ -187,7 +112,7 @@ const Object = () => {
                         </thead>
 
                         <tbody>
-                            {users.map((item, index) => (
+                            {patients.map((item, index) => (
                                 <tr key={index}>
                                     <td className="p-4">
                                         <Typography
@@ -204,46 +129,18 @@ const Object = () => {
                                             color="blue-gray"
                                             className="font-bold"
                                         >
-                                            {item?.object_name}
+                                            {item?.patient_name}
                                         </Typography>
                                     </td>
+
                                     <td className="p-4">
-                                        <Typography
-                                            variant="small"
-                                            color="blue-gray"
-                                            className="font-bold"
+                                        <Link
+                                            to={`/payment-detail/${item?.paid_id}/${item?.patient_name}`}
+                                            className="bg-main-green text-white px-4 py-1 rounded-md flex gap-2 items-center justify-center w-[150px]"
                                         >
-                                            {item?.total_floors}
-                                        </Typography>
-                                    </td>
-                                    {/* <td className="p-4">
-                                                <Typography
-                                                    variant="small"
-                                                    color="blue-gray"
-                                                    className="font-normal"
-                                                >
-                                                    {item?.department_name_ru}
-                                                </Typography>
-                                            </td> */}
-
-                                    <td>
-                                        <EditObject
-                                            item={item}
-                                            changeStatus={changeStatus}
-                                            language={language}
-                                        />
-
-                                        {/* <IconButton
-                                            variant="text"
-                                            onClick={() =>
-                                                deleteData(item.object_id)
-                                            }
-                                        >
-                                            <TrashIcon
-                                                className="h-4 w-4"
-                                                color="red"
-                                            />
-                                        </IconButton> */}
+                                            <FaEye size={15} />
+                                            <p>Детально</p>
+                                        </Link>
                                     </td>
                                 </tr>
                             ))}
@@ -260,4 +157,4 @@ const Object = () => {
     );
 };
 
-export default Object;
+export default HistoryPayment;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { PiHeartbeatFill } from "react-icons/pi";
 import { FaClinicMedical } from "react-icons/fa";
-import { IoPerson } from "react-icons/io5";
+import { IoFastFood, IoPerson } from "react-icons/io5";
 import { IoPeopleSharp } from "react-icons/io5";
 import { MdMedicalServices } from "react-icons/md";
 import { FaGripfire } from "react-icons/fa6";
@@ -220,7 +220,6 @@ const Sidebar = ({ active, setActive }) => {
                     }`}
                 >
                     <p
-                        to=""
                         className={`flex gap-2 justify-${
                             sidebar ? "start" : "center"
                         }`}
@@ -374,6 +373,26 @@ const Sidebar = ({ active, setActive }) => {
                     >
                         <RiHomeOfficeFill size={25} />
                         {sidebar ? "Склады" : ""}
+                    </Link>
+                </li>
+                <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/diet"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
+                    <Link
+                        to="/diet"
+                        className={`flex gap-2 justify-${
+                            sidebar ? "start" : "center"
+                        }`}
+                    >
+                        <IoFastFood size={25} />
+                        {sidebar ? "Еда" : ""}
                     </Link>
                 </li>
             </ul>

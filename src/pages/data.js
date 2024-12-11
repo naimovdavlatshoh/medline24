@@ -13,5 +13,21 @@ export { default as Method } from "./Method/Method";
 export { default as Share } from "./Share/Share";
 export { default as Warehouse } from "./Warehouse/Warehouse";
 export { default as Actions } from "./Action/Action";
+export { default as Diet } from "./Diet/Diet";
+
+// Register
+export { default as AllPatients } from "./Registration/Register/AllPatients";
+export { default as AddVisit } from "./Registration/Register/AddVisit";
+export { default as PatientVisits } from "./Registration/Register/PatientVisits";
+
+// Vrach
+export { default as RecievePatient } from "./Vrach/RecievePatient/RecievePatient";
+export { default as AmbulatorPatients } from "./Vrach/AmbulatorPatients/AmbulatorPatients";
+export { default as AmbulatorDetail } from "./Vrach/AmbulatorPatients/AmbulatorDetail";
+
+// Kassa
+export { default as Priyom } from "./Kassa/Priyom/Priyom";
+export { default as HistoryPayment } from "./Kassa/HistoryPayment/HistoryPayment";
+export { default as HistoryDetail } from "./Kassa/HistoryPayment/HistoryDetail";
 
 export { default as NotFound } from "./notfound/404";

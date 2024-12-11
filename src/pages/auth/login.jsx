@@ -19,9 +19,15 @@ const Login = () => {
             password: password,
         };
         PostData("login", data)
-            .then((res) => localStorage.setItem("token", res.data.jwt))
+            .then((res) => {
+                localStorage.setItem("token", res.data.jwt),
+                    localStorage.setItem("role", res.data.role_name);
+            })
             .then(() => {
-                navigate("/"), window.location.reload();
+                navigate("/"),
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
             })
             .catch((err) => {
                 const myObj = err.response.data;

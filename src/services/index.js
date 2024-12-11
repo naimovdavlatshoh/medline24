@@ -31,6 +31,19 @@ export const PostDataTokenJson = async (url, data) => {
     return response;
 };
 
+export const PostSimple = async (url) => {
+    const response = await axios.post(
+        BASE_URL + url,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${Token}`,
+            },
+        }
+    );
+    return response;
+};
+
 export const PutDataToken = async (url, data) => {
     const response = await axios.put(BASE_URL + url, data, {
         headers: {

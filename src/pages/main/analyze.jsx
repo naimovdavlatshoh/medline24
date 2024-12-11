@@ -82,6 +82,8 @@ const Analyze = () => {
         setOpen2(!open2), setAnalyze_id(item.analizy_id);
     };
 
+    console.log(analyze_id);
+
     const handleOpen1 = (value) => {
         setSize1(value), setStatus(!status);
     };
@@ -151,8 +153,6 @@ const Analyze = () => {
             service_id: currentUser.service_id,
             analizy_name: currentUser.analizy_name,
             analizy_code: currentUser.analizy_code,
-            standart: "asbdvhbshfbvsaz",
-            unit_of_measurement: "ansbdvhab dfsjkn",
         };
 
         PostDataTokenJson(`api/analizy/update/${currentUser?.analizy_id}`, data)

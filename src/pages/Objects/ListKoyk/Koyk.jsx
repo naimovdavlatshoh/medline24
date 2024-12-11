@@ -71,10 +71,13 @@ const Koyk = () => {
     }, [language]);
 
     useEffect(() => {
-        GetDataSimple("api/koykatype/list?page=1&limit=10").then((res) => {
-            setUsers(res?.result);
-            setTotalPages(res.pages);
-        });
+        GetDataSimple(`api/koykatype/list?page=${currentPage}&limit=10`).then(
+            (res) => {
+                setUsers(res?.result);
+                console.log(res);
+                setTotalPages(res.pages);
+            }
+        );
     }, [status, currentPage]);
 
     const changeStatus = () => {
@@ -89,13 +92,18 @@ const Koyk = () => {
     };
 
     const deleteData = (id) => {
+        console.log(id);
         setOpen(!open);
         setDeletedId(id);
     };
 
     return (
         <div>
-            <Dialog className="text-theme-text bg-theme-bg" open={open} handler={handleOpen}>
+            <Dialog
+                className="text-theme-text bg-theme-bg"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>
@@ -252,7 +260,7 @@ const Koyk = () => {
                                         <IconButton
                                             variant="text"
                                             onClick={() =>
-                                                deleteData(item.koyka_type_id)
+                                                deleteData(item.koyka_price_id)
                                             }
                                         >
                                             <TrashIcon

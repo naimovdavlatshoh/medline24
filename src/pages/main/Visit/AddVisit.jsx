@@ -25,21 +25,22 @@ export function AddVisit({ changeStatus, language }) {
     useEffect(() => {
         GetDataSimple("api/visittype/list").then((res) => {
             setTypes(res);
+            console.log(res.option);
         });
     }, []);
 
     const AddUser = (e) => {
         const data = {
             free_visit_name: free_name,
-            visit_type_id: type,
+            visit_type_id: parseInt(type),
             option: selectedTypes,
         };
 
         PostDataTokenJson("api/freevisit/create", data)
             .then(() => {
                 handleOpen(null);
-                changeStatus();
             })
+            .then(() => changeStatus())
             .catch(() => {
                 handleOpen(null);
             });
@@ -49,20 +50,20 @@ export function AddVisit({ changeStatus, language }) {
     const handleSelectType = (selectedType) => {
         setSelectedTypes((prevSelectedTypes) => {
             const isAlreadySelected = prevSelectedTypes.some(
-                (item) => item.visit_type_id === selectedType.visit_type_id
+                (item) => item.type === selectedType.type
             );
 
             if (isAlreadySelected) {
                 // Remove if already selected
                 return prevSelectedTypes.filter(
-                    (item) => item.visit_type_id !== selectedType.visit_type_id
+                    (item) => item.type !== selectedType.type
                 );
             }
 
             // Add new type
             return [
                 ...prevSelectedTypes,
-                { visit_type_id: selectedType.visit_type_id },
+                { visit_type_id: parseInt(selectedType.type) },
             ];
         });
     };
@@ -97,9 +98,7 @@ export function AddVisit({ changeStatus, language }) {
                                     {types?.main?.map((t) => (
                                         <Option
                                             key={t.visit_type_id}
-                                            onClick={() =>
-                                                setType(t.visit_type_id)
-                                            }
+                                            onClick={() => setType(t.type)}
                                         >
                                             {t?.visit_name}
                                         </Option>

@@ -41,14 +41,12 @@ export function EditMethod({ item, changeStatus }) {
 
     return (
         <>
-            <Tooltip content="Edit User">
-                <IconButton variant="text" onClick={() => handleOpen("xs")}>
-                    <PencilIcon className="h-4 w-4" color="orange" />
-                </IconButton>
-            </Tooltip>
+            <IconButton variant="text" onClick={() => handleOpen("xs")}>
+                <PencilIcon className="h-4 w-4" color="orange" />
+            </IconButton>
 
             <Dialog
-            className="bg-theme-bg text-theme-text"
+                className="bg-theme-bg text-theme-text"
                 open={size === "xs"}
                 size={size || "xs"}
                 handler={handleOpen}

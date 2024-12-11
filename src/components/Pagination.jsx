@@ -26,7 +26,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
     };
     return (
         <div>
-            <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+            <CardFooter className="flex items-center justify-between  p-4">
                 <Button
                     variant="outlined"
                     size="sm"
@@ -39,6 +39,7 @@ const Pagination = ({ currentPage, totalPages, setCurrentPage }) => {
                 <div className="flex items-center gap-2">
                     {[...Array(totalPages)?.keys()]?.map((page) => (
                         <IconButton
+                            key={page}
                             variant={
                                 currentPage == page + 1 ? "outlined" : "text"
                             }

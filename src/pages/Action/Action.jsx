@@ -134,7 +134,11 @@ const Action = () => {
 
     return (
         <div>
-            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru"
                         ? "Вы уверены, что хотите удалить?"
@@ -447,27 +451,19 @@ const Action = () => {
                                     </td>
 
                                     <td>
-                                        <Tooltip
-                                            content={
-                                                language == "ru"
-                                                    ? "удалить акции"
-                                                    : "foydalanuvchini o'chirish"
+                                        <IconButton
+                                            variant="text"
+                                            onClick={() =>
+                                                deleteData(item.aksiya_id)
                                             }
                                         >
-                                            <IconButton
-                                                variant="text"
-                                                onClick={() =>
-                                                    deleteData(item.aksiya_id)
-                                                }
-                                            >
-                                                {
-                                                    <TrashIcon
-                                                        className="h-4 w-4"
-                                                        color="red"
-                                                    />
-                                                }
-                                            </IconButton>
-                                        </Tooltip>
+                                            {
+                                                <TrashIcon
+                                                    className="h-4 w-4"
+                                                    color="red"
+                                                />
+                                            }
+                                        </IconButton>
                                     </td>
                                 </tr>
                             ))}

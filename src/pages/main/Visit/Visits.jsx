@@ -62,10 +62,12 @@ const Visits = () => {
     }, []);
 
     useEffect(() => {
-        GetDataSimple("api/freevisit/list?page=1&limit=10").then((res) => {
-            setUsers(res?.result);
-            setTotalPages(res?.pages);
-        });
+        GetDataSimple(`api/freevisit/list?page=${currentPage}&limit=10`).then(
+            (res) => {
+                setUsers(res?.result);
+                setTotalPages(res?.pages);
+            }
+        );
     }, [status, currentPage]);
 
     const changeStatus = () => {
@@ -86,7 +88,11 @@ const Visits = () => {
 
     return (
         <div>
-            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>
                     {language == "ru" ? Delete.titleru : Delete.titleuz}
                 </DialogHeader>

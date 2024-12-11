@@ -49,7 +49,7 @@ const Personal = () => {
     const [roles, setRoles] = useState([]);
     const [role, setRole] = useState(null);
     const [parts, setParts] = useState([]);
-    const [part, setPart] = useState(null);
+    const [part, setPart] = useState(0);
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [fatherName, setFathername] = useState("");
@@ -115,11 +115,13 @@ const Personal = () => {
             login: login,
             password: password,
             role_id: parseInt(role.role_id),
-            dept_id: parseInt(part),
+            dept_id: parseInt(part ? part : "0"),
         };
         console.log(role, part);
         PostDataTokenJson("/api/user/create", data)
-            .then(() => handleOpen(null))
+            .then(() => {
+                handleOpen(null), setStatus(!status);
+            })
             .catch(() => {
                 handleOpen(null), setStatus(!status);
             });
@@ -132,11 +134,16 @@ const Personal = () => {
             fathername: currentUser.fathername,
             login: currentUser?.login,
             password: currentUser?.password,
-            role_id: currentUser?.role_id,
+            role_id: parseInt(currentUser?.role_id),
+            dept_id: parseInt(
+                currentUser?.debt_id ? currentUser?.dept_id : "0"
+            ),
         };
 
         PostDataTokenJson(`api/user/update/${currentUser?.user_id}`, data)
-            .then(() => handleOpen1(null))
+            .then(() => {
+                handleOpen1(null), setStatus(!status);
+            })
             .catch(() => {
                 handleOpen1(null), setStatus(!status);
             });
@@ -153,6 +160,9 @@ const Personal = () => {
         setOpen(!open);
         setDeletedId(id);
     };
+
+    console.log(currentUser);
+    console.log(roles);
 
     return (
         <div>
@@ -391,8 +401,6 @@ const Personal = () => {
                                                                         ...prev,
                                                                         ["role_id"]:
                                                                             i?.role_id,
-                                                                        ...prev,
-                                                                        ...prev,
 
                                                                         ["role_name"]:
                                                                             i?.role_name,
@@ -402,6 +410,7 @@ const Personal = () => {
                                                             className="text-theme-text bg-theme-bg mb-2"
                                                         >
                                                             {i.role_name}
+                                                            {i.role_id}
                                                         </Option>
                                                     )
                                                 )}

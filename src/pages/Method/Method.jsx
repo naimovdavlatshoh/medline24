@@ -73,7 +73,11 @@ const Method = () => {
 
     return (
         <div>
-            <Dialog className="bg-theme-bg text-theme-text" open={open} handler={handleOpen}>
+            <Dialog
+                className="bg-theme-bg text-theme-text"
+                open={open}
+                handler={handleOpen}
+            >
                 <DialogHeader>Are you sure delete this wiki?</DialogHeader>
                 <DialogFooter>
                     <Button
@@ -167,11 +171,11 @@ const Method = () => {
                                             item={item}
                                             changeStatus={changeStatus}
                                         />
-                                        <Tooltip content="Delete User">
+                                        {/* <Tooltip content="Delete User">
                                             <IconButton
                                                 variant="text"
                                                 onClick={() =>
-                                                    deleteData(item.palata_id)
+                                                    deleteData(item.inj_met_id)
                                                 }
                                             >
                                                 <TrashIcon
@@ -179,7 +183,7 @@ const Method = () => {
                                                     color="red"
                                                 />
                                             </IconButton>
-                                        </Tooltip>
+                                        </Tooltip> */}
                                     </td>
                                 </tr>
                             ))}

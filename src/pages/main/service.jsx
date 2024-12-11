@@ -92,6 +92,7 @@ const Service = () => {
     useEffect(() => {
         GetDataSimple("api/services/visits").then((res) => {
             setTypes(res);
+            console.log(res);
         });
     }, []);
 
@@ -121,16 +122,16 @@ const Service = () => {
             price_for_locals: priceuz,
             price_for_tourist: priceru,
             role_id: role,
-            service_type: type?.visit_type_id,
-            dept_id: part,
+            service_type: type?.type,
+            dept_id: parseInt(part),
         };
 
-        PostDataTokenJson("api/services/create", data).then(() =>
-            handleOpen(null)
-        );
-        setStatus(!status).catch(() => {
-            handleOpen(null), setStatus(!status);
-        });
+        PostDataTokenJson("api/services/create", data)
+            .then(() => handleOpen(null))
+            .then(() => setStatus(!status))
+            .catch(() => {
+                handleOpen(null), setStatus(!status);
+            });
     };
 
     console.log(currentUser);
@@ -138,15 +139,18 @@ const Service = () => {
     const UpdateUser = (e) => {
         e.preventDefault();
         const data = {
-            firstname: currentUser?.firstname,
-            lastname: currentUser?.lastname,
-            fathername: currentUser.fathername,
-            login: currentUser?.login,
-            password: currentUser?.password,
-            role_id: currentUser?.role_id,
+            service_name: service,
+            price_for_locals: priceuz,
+            price_for_tourist: priceru,
+            role_id: role,
+            service_type: type?.type,
+            dept_id: parseInt(part),
         };
 
-        PostDataTokenJson(`api/user/update/${currentUser?.user_id}`, data)
+        PostDataTokenJson(
+            `api/services/update/${currentUser?.service_id}`,
+            data
+        )
             .then(() => handleOpen1(null))
             .catch(() => {
                 handleOpen1(null), setStatus(!status);
@@ -252,6 +256,20 @@ const Service = () => {
                                             </Option>
                                         ))}
                                     </Select>
+                                </div>
+
+                                <div className="w-1/3 flex flex-col gap-4">
+                                    <Input
+                                        onChange={(e) =>
+                                            setService(e.target.value)
+                                        }
+                                        color="blue"
+                                        label={
+                                            language == "ru"
+                                                ? "имя службы (ru):"
+                                                : "xizmat nomi (ru):"
+                                        }
+                                    />
                                     <Select
                                         color="blue"
                                         label={
@@ -268,24 +286,10 @@ const Service = () => {
                                                 }}
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {item.visit_name}
+                                                
                                             </Option>
                                         ))}
                                     </Select>
-                                </div>
-
-                                <div className="w-1/3 flex flex-col gap-4">
-                                    <Input
-                                        onChange={(e) =>
-                                            setService(e.target.value)
-                                        }
-                                        color="blue"
-                                        label={
-                                            language == "ru"
-                                                ? "имя службы (ru):"
-                                                : "xizmat nomi (ru):"
-                                        }
-                                    />
                                 </div>
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
@@ -364,127 +368,96 @@ const Service = () => {
                                         color="blue"
                                         label={
                                             language == "ru"
-                                                ? "Выбрать роль : " +
-                                                  currentUser?.role_name
-                                                : "Rol tanlash : " +
-                                                  currentUser?.role_name
+                                                ? "выбрать роль:"
+                                                : "Rol tanlang:"
                                         }
-                                        value={role?.role_name}
                                     >
-                                        {roles?.map((item, index) => (
-                                            <Option
-                                                onClick={() => {
-                                                    setCurrentUser((prev) => ({
-                                                        ...prev,
-                                                        ["role_id"]:
-                                                            item?.role_id,
-                                                    }));
-                                                }}
-                                                className="text-theme-text bg-theme-bg mb-2"
-                                            >
-                                                {item.role_name}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                    {/* <Select
-                                        color="blue"
-                                        label="Отдел:"
-                                        disabled={currentUser?.role_id !== "7"}
-                                    >
-                                        {parts.map((item, index) => (
+                                        {roles.map((item) => (
                                             <Option
                                                 onClick={() =>
-                                                    setCurrentUser((prev) => ({
-                                                        ...prev,
-                                                        ["department"]:
-                                                            item?.department_id,
-                                                    }))
+                                                    setRole(item?.role_id)
                                                 }
                                                 className="text-theme-text bg-theme-bg mb-2"
                                             >
-                                                {item?.department_name_ru}
+                                                {item?.role_name}
                                             </Option>
                                         ))}
-                                    </Select> */}
-                                    <Input
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["lastname"]: e.target.value,
-                                            }))
-                                        }
+                                    </Select>
+                                    <Select
                                         color="blue"
-                                        defaultValue={currentUser?.lastname}
                                         label={
                                             language == "ru"
-                                                ? "Фамилия пользователя:"
-                                                : "Foydalanuvchining familyasi"
+                                                ? "выбрать отдел:"
+                                                : "bo'lim tanlang:"
                                         }
-                                    />
+                                    >
+                                        {parts.map((item) => (
+                                            <Option
+                                                onClick={() =>
+                                                    setPart(item?.role_id)
+                                                }
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {item?.department_name}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </div>
 
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
-                                        defaultValue={currentUser?.login}
                                         onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["login"]: e.target.value,
-                                            }))
+                                            setService(e.target.value)
                                         }
                                         color="blue"
                                         label={
                                             language == "ru"
-                                                ? "Логин:"
-                                                : "Login:"
+                                                ? "имя службы (ru):"
+                                                : "xizmat nomi (ru):"
                                         }
                                     />
-                                    <Input
-                                        defaultValue={currentUser?.password}
-                                        required
-                                        onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["password"]: e.target.value,
-                                            }))
-                                        }
+                                    <Select
                                         color="blue"
                                         label={
                                             language == "ru"
-                                                ? "Пароль:"
-                                                : "Kod:"
+                                                ? "Выбирите тип:"
+                                                : "tur tanlang:"
                                         }
-                                    />
+                                        value={role?.role_name}
+                                    >
+                                        {types?.map((item) => (
+                                            <Option
+                                                onClick={() => {
+                                                    setType(item);
+                                                }}
+                                                className="text-theme-text bg-theme-bg mb-2"
+                                            >
+                                                {item.visit_name}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </div>
                                 <div className="w-1/3 flex flex-col gap-4">
                                     <Input
                                         color="blue"
-                                        defaultValue={currentUser?.firstname}
                                         onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["firstname"]: e.target.value,
-                                            }))
+                                            setPriceuz(e.target.value)
                                         }
                                         label={
                                             language == "ru"
-                                                ? "Имя пользователя:"
-                                                : "Foydalanuvchi nomi:"
+                                                ? "цена за местный:"
+                                                : "mahalliy aholi uchun narx:"
                                         }
                                     />
                                     <Input
                                         color="blue"
-                                        defaultValue={currentUser?.fathername}
                                         onChange={(e) =>
-                                            setCurrentUser((prev) => ({
-                                                ...prev,
-                                                ["fathername"]: e.target.value,
-                                            }))
+                                            setPriceru(e.target.value)
                                         }
                                         label={
                                             language == "ru"
-                                                ? "Отчество пользователя:"
-                                                : "Foydalanuvchi sharifi:"
+                                                ? "цена для туриста:"
+                                                : "turistlar uchun narx:"
                                         }
                                     />
                                 </div>
@@ -499,8 +472,8 @@ const Service = () => {
                                 >
                                     <span>
                                         {language == "ru"
-                                            ? Edit.rufalse
-                                            : Edit.uzfalse}
+                                            ? Add.rufalse
+                                            : Add.uzfalse}
                                     </span>
                                 </Button>
                                 <Button
@@ -509,9 +482,10 @@ const Service = () => {
                                     type="submit"
                                 >
                                     <span>
+                                        {" "}
                                         {language == "ru"
-                                            ? Edit.rutrue
-                                            : Edit.uztrue}
+                                            ? Add.rutrue
+                                            : Add.uztrue}
                                     </span>
                                 </Button>
                             </div>
@@ -529,7 +503,9 @@ const Service = () => {
                     <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center bg-theme-bg text-theme-text">
                         <div>
                             <Typography variant="h5" color="blue-gray">
-                                Список Пользователей
+                                {language == "ru"
+                                    ? "Список услуг"
+                                    : "Xizmatlar ro'yxati"}
                             </Typography>
                         </div>
                         <div className="flex w-full shrink-0 gap-2 md:w-max">
@@ -547,7 +523,9 @@ const Service = () => {
                                 onClick={() => handleOpen("xl")}
                                 size="sm"
                             >
-                                добавить пользователя
+                                {language == "ru"
+                                    ? "Добавить услугу"
+                                    : "Xizmat qo'shish"}
                             </Button>
                         </div>
                     </div>

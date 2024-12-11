@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import Navbar from "./Navbar";
+import KassaSidebar from "./KassaSidebar";
+import KassaNavbar from "./KassaNavbar";
 
 import { useState } from "react";
-import ThemeToggle from "./ThemeToggle";
+import KassaThemeToggle from "./KassaThemeToggle";
 import { RiMenuUnfold3Fill } from "react-icons/ri";
 
-const AdminLayout = () => {
+const KassaLayout = () => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
     const [mode, setMode] = useState(localStorage.getItem("theme"));
     const [active, setActive] = useState(false);
@@ -19,8 +19,6 @@ const AdminLayout = () => {
         }
     }, [theme1]);
 
-    console.log(theme1);
-
     return (
         <>
             <div
@@ -31,13 +29,13 @@ const AdminLayout = () => {
                 }`}
             >
                 {/* Sidebar (Static) */}
-                <Sidebar />
+                <KassaSidebar />
 
                 {/* Main Content Area */}
                 <div className="flex flex-col flex-grow  h-[120px]">
                     {/* Navbar (Top of Children Component) */}
                     <div className="h-[10vh]">
-                        <Navbar setTheme1={setTheme1} />
+                        <KassaNavbar setTheme1={setTheme1} />
                     </div>
 
                     {/* Dynamic Content Area */}
@@ -59,7 +57,7 @@ const AdminLayout = () => {
                         active ? "translate-x-0" : "-translate-x-full"
                     }`}
                 >
-                    <Sidebar active={active} setActive={setActive} />
+                    <KassaSidebar active={active} setActive={setActive} />
                 </div>
 
                 {/* Main Content Area */}
@@ -104,7 +102,7 @@ const AdminLayout = () => {
                                         ru
                                     </div>
                                 </div>
-                                <ThemeToggle setTheme1={setTheme1} />
+                                <KassaThemeToggle setTheme1={setTheme1} />
                             </div>
                         </div>
                     </div>
@@ -119,4 +117,4 @@ const AdminLayout = () => {
     );
 };
 
-export default AdminLayout;
+export default KassaLayout;

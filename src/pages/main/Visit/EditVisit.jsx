@@ -28,6 +28,7 @@ export function EditVisit({ item, changeStatus, language }) {
     useEffect(() => {
         GetDataSimple("api/visittype/list").then((res) => {
             setTypes(res);
+   
         });
     }, []);
 
@@ -106,7 +107,7 @@ export function EditVisit({ item, changeStatus, language }) {
                                                 setType(t.visit_type_id)
                                             }
                                         >
-                                            {t?.visit_name_ru}
+                                            {t?.visit_name}
                                         </Option>
                                     ))}
                                 </Select>

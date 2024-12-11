@@ -25,16 +25,16 @@ export function EditKoyk({ item, changeStatus, language }) {
 
     const handleOpen = (value) => setSize(value);
 
-    useEffect(() => {
-        GetDataSimple("api/department/list?page=1&limit=10").then((res) => {
-            setTypes(res?.result);
-        });
-    }, []);
-    useEffect(() => {
-        GetDataSimple("api/object/list?page=1&limit=10").then((res) => {
-            setObjects(res?.result);
-        });
-    }, []);
+    // useEffect(() => {
+    //     GetDataSimple("api/department/list?page=1&limit=10").then((res) => {
+    //         setTypes(res?.result);
+    //     });
+    // }, []);
+    // useEffect(() => {
+    //     GetDataSimple("api/object/list?page=1&limit=10").then((res) => {
+    //         setObjects(res?.result);
+    //     });
+    // }, []);
 
     const AddUser = (e) => {
         const data = {
@@ -43,7 +43,7 @@ export function EditKoyk({ item, changeStatus, language }) {
             koyka_tourist_price: touristPrice,
         };
 
-        PostDataTokenJson(`api/koykatype/update/${item?.koyka_type_id}`, data)
+        PostDataTokenJson(`api/koykatype/update/${item?.koyka_price_id}`, data)
             .then(() => {
                 handleOpen(null);
                 changeStatus();
