@@ -2,10 +2,6 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 import {
     Button,
-    Menu,
-    MenuHandler,
-    MenuList,
-    MenuItem,
 } from "@material-tailwind/react";
 import {
     Card,
@@ -18,10 +14,8 @@ import { useEffect, useState } from "react";
 
 import Pagination from "../../../components/Pagination";
 
-import { CiMenuKebab } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import { GetDataSimple } from "../../../services";
-import { FaE } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
 
 const TABLE_HEAD = [
@@ -282,7 +276,7 @@ const AmbulatorPatient = () => {
 
                                         <td className="p-4 w-[80px]">
                                             <Link
-                                                to={`/ambulator-details/${item?.visit_id}`}
+                                                to={`/ambulator-details/${item?.visit_id}/${item?.patient_id}`}
                                                 className=""
                                             >
                                                 <Button

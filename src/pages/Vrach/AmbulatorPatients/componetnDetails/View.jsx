@@ -10,12 +10,15 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { FaEye } from "react-icons/fa";
+import { GetDataSimple } from "../../../../services";
+import { useParams } from "react-router-dom";
 const TABLE_HEAD = ["Услуга", "Действия"];
 const TABLE_HEADUZ = ["Xizmat", "Amal"];
 
 const View = (item) => {
-    console.log(item);
+    const { id } = useParams();
     const [language, setLanguage] = useState("ru");
+    const [data, setData] = useState(null);
 
     useEffect(() => {
         const lang = localStorage.getItem("lang");
@@ -23,6 +26,14 @@ const View = (item) => {
             setLanguage(lang);
         }
     }, [language]);
+    useEffect(() => {
+        GetDataSimple(
+            `api/doctor/ambulator/patient/card/inspection/${id}`
+        ).then((res) => {
+            setData(res);
+        });
+    }, []);
+
     return (
         <div className="">
             <Card className="h-full w-full">
@@ -96,13 +107,13 @@ const View = (item) => {
 
                         <tbody>
                             <tr>
-                                <td className="p-4 w-[40px] text-left">
+                                <td className="p-4  text-left">
                                     <Typography
                                         variant="small"
                                         color="blue-gray"
                                         className="font-bold"
                                     >
-                                        Пульмонолог
+                                        {data?.service_name}
                                     </Typography>
                                 </td>
                                 <td className="p-4 text-right flex justify-end gap-2">

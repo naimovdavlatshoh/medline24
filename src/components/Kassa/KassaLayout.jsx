@@ -22,7 +22,7 @@ const KassaLayout = () => {
     return (
         <>
             <div
-                className={`hidden md:flex h-[130vh] theme-text ${
+                className={`hidden md:flex  theme-text ${
                     theme1 == "dark"
                         ? "bg-secondary-back"
                         : "bg-secondary-light"
@@ -32,15 +32,15 @@ const KassaLayout = () => {
                 <KassaSidebar />
 
                 {/* Main Content Area */}
-                <div className="flex flex-col flex-grow  h-[120px]">
+                <div className="flex flex-col flex-grow">
                     {/* Navbar (Top of Children Component) */}
                     <div className="h-[10vh]">
                         <KassaNavbar setTheme1={setTheme1} />
                     </div>
 
                     {/* Dynamic Content Area */}
-                    <div className=" theme-text min-h-[120vh] p-10">
-                        <Outlet /> {/* This will render the dynamic content */}
+                    <div className=" theme-text  p-10">
+                        <Outlet />
                     </div>
                 </div>
             </div>

@@ -12,6 +12,7 @@ import {
     Typography,
 } from "@material-tailwind/react";
 import { FaEye } from "react-icons/fa";
+import ModalAddService from "./modalAddService";
 const TABLE_HEAD = [
     "№",
     "Отдел/Специалист",
@@ -46,7 +47,7 @@ const AddService = (item) => {
                 <CardHeader
                     floated={false}
                     shadow={false}
-                    className="rounded-none "
+                    className="rounded-none"
                 >
                     <div className="flex justify-between items-center border-b border-gray-700 pb-2">
                         <p className="flex gap-2 items-center">
@@ -55,12 +56,7 @@ const AddService = (item) => {
                             </span>
                             <span>{item.title}</span>
                         </p>
-                        <button className="flex gap-2 items-center text-main-green">
-                            <span>
-                                <AiOutlinePlus />
-                            </span>
-                            <span>Пакеты</span>
-                        </button>
+                        <ModalAddService />
                     </div>
                 </CardHeader>
                 <CardBody className="overflow-scroll px-0">

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import RegisterThemeToggle from "./RegisterThemeToggle";
+import Logout from "../Logout";
 
 const RegisterNavbar = ({ setTheme1 }) => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
@@ -37,6 +38,7 @@ const RegisterNavbar = ({ setTheme1 }) => {
                 </div>
             </div>
             <RegisterThemeToggle setTheme1={setTheme1} />
+            <Logout />
         </div>
     );
 };

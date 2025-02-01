@@ -26,6 +26,19 @@ import {
     HistoryPayment,
     HistoryDetail,
     PatientVisits,
+    NewPatients,
+    AmbulatorPatientsLabaratory,
+    Refund,
+    NewDiagnosticPatients,
+    DiagnosticPatients,
+    Drugs,
+    Supplier,
+    Manafacturer,
+    Coming,
+    Remainder,
+    Relocation,
+    Return,
+    NurseWarehouse,
 } from "./pages/data";
 import useTokenExpiration from "./components/useTokenExpiration";
 import AdminLayout from "./components/MainLayout";
@@ -33,9 +46,13 @@ import RegisterLayout from "./components/Register/RegisterLayout";
 import VrachLayout from "./components/Vrach/VrachLayout";
 import AmbulatorPatient from "./pages/Vrach/AmbulatorPatients/AmbulatorPatients";
 import KassaLayout from "./components/Kassa/KassaLayout";
+import LabaratoryLayout from "./components/Labaratory/LabaratoryLayout";
+import DiagnosticLayout from "./components/Diagnostic/DiagnosticLayout";
+import PharmacyLayout from "./components/Pharmacy/PharmacyLayout";
+import NurseLayout from "./components/Nurse/NurseLayout";
 
 const App = () => {
-    useTokenExpiration(); // Check for token expiration
+    useTokenExpiration();
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
@@ -76,7 +93,7 @@ const App = () => {
                         element={<AmbulatorPatient />}
                     />
                     <Route
-                        path="/ambulator-details/:id"
+                        path="/ambulator-details/:id/:patientId"
                         element={<AmbulatorDetail />}
                     />
                 </Route>
@@ -92,9 +109,50 @@ const App = () => {
                         path="/payment-detail/:id/:name"
                         element={<HistoryDetail />}
                     />
+                    <Route path="/refund" element={<Refund />} />
                 </Route>
             )}
-
+            {localStorage.getItem("role") == "Лаборатория" && (
+                <Route path="/" element={<LabaratoryLayout />}>
+                    <Route index element={<NewPatients />} />
+                    <Route
+                        path="/ambulatory-patients"
+                        element={<AmbulatorPatientsLabaratory />}
+                    />
+                </Route>
+            )}
+            {localStorage.getItem("role") == "Диагностика" && (
+                <Route path="/" element={<DiagnosticLayout />}>
+                    <Route index element={<NewDiagnosticPatients />} />
+                    <Route
+                        path="/diagnostic-ambulator-patients"
+                        element={<DiagnosticPatients />}
+                    />
+                </Route>
+            )}
+            {localStorage.getItem("role") == "Медсестра" && (
+                <Route path="/" element={<NurseLayout />}>
+                    <Route index element={<NurseWarehouse />} />
+                    <Route
+                        path="/diagnostic-ambulator-patients"
+                        element={<DiagnosticPatients />}
+                    />
+                </Route>
+            )}
+            {localStorage.getItem("role") == "Аптекарь" && (
+                <Route path="/" element={<PharmacyLayout />}>
+                    <Route index element={<Drugs />} />
+                    <Route path="/supplier" element={<Supplier />} />
+                    <Route path="/manafacturer" element={<Manafacturer />} />
+                    <Route path="/coming" element={<Coming />} />
+                    <Route path="/remainder" element={<Remainder />} />
+                    <Route
+                        path="/relocation-requests"
+                        element={<Relocation />}
+                    />
+                    <Route path="/return-requests" element={<Return />} />
+                </Route>
+            )}
             <Route path="/addvisit/:id" element={<AddVisit />} />
         </Routes>
     );

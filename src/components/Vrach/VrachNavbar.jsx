@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import VrachThemeToggle from "./VrachThemeToggle";
+import Logout from "../Logout";
 
 const VrachNavbar = ({ setTheme1 }) => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
@@ -37,6 +38,7 @@ const VrachNavbar = ({ setTheme1 }) => {
                 </div>
             </div>
             <VrachThemeToggle setTheme1={setTheme1} />
+            <Logout />
         </div>
     );
 };

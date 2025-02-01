@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ThemeToggle from "./ThemeToggle";
+import Logout from "./Logout";
 
 const Navbar = ({ setTheme1 }) => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
@@ -37,6 +38,7 @@ const Navbar = ({ setTheme1 }) => {
                 </div>
             </div>
             <ThemeToggle setTheme1={setTheme1} />
+            <Logout />
         </div>
     );
 };

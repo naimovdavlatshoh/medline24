@@ -21,7 +21,8 @@ const Login = () => {
         PostData("login", data)
             .then((res) => {
                 localStorage.setItem("token", res.data.jwt),
-                    localStorage.setItem("role", res.data.role_name);
+                    localStorage.setItem("role", res.data.role_name),
+                    localStorage.setItem("warehouse_id", res.data.warehouse_id);
             })
             .then(() => {
                 navigate("/"),

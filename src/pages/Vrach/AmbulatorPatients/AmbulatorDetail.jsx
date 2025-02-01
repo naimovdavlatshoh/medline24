@@ -75,7 +75,6 @@ const AmbulatorDetail = () => {
         GetDataSimple(`api/doctor/ambulator/patient/card/read/${id}`).then(
             (res) => {
                 setPatient(res);
-                console.log(res);
             }
         );
     }, [status]);

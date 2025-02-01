@@ -22,6 +22,9 @@ export function Payment({ item, changeStatus }) {
     const [paymentCardStatus, setPaymentCardStatus] = useState(false);
     const [paymentTransfer, setPaymentTransfer] = useState(0);
     const [paymentTransferStatus, setPaymentTransferStatus] = useState(false);
+    const [remainingAmount, setRemainingAmount] = useState(
+        item?.finally_price_with_discount || 0
+    );
 
     const option_data = item?.option?.map(
         ({ payment_id, visit_service_item_id }) => ({
@@ -29,8 +32,6 @@ export function Payment({ item, changeStatus }) {
             visit_service_item_id,
         })
     );
-
-    console.log(option_data);
 
     useEffect(() => {
         const lang = localStorage.getItem("lang");
@@ -40,9 +41,20 @@ export function Payment({ item, changeStatus }) {
     }, [language]);
 
     const handleOpen = (value) => setSize(value);
+    const calculateRemaining = () => {
+        const usedAmount =
+            (paymentCashStatus ? parseFloat(paymentCash || 0) : 0) +
+            (paymentCardStatus ? parseFloat(paymentCard || 0) : 0) +
+            (paymentTransferStatus ? parseFloat(paymentTransfer || 0) : 0);
+        const remaining = (item?.finally_price_with_discount || 0) - usedAmount;
+        return remaining > 0 ? remaining : 0;
+    };
+
+    useEffect(() => {
+        setRemainingAmount(calculateRemaining());
+    }, [paymentCash, paymentCard, paymentTransfer]);
 
     const handlePayment = () => {
-        console.log("salom");
         const data = {
             payment_id: item.payment_id,
             discount: discount,
@@ -174,7 +186,7 @@ export function Payment({ item, changeStatus }) {
                                     onChange={(e) => {
                                         setPaymentTransfer(e.target.value);
                                     }}
-                                    placeholder="расчет"
+                                    placeholder={remainingAmount}
                                     className="border-b border-main-green w-full bg-transparent outline-none"
                                 />
                             </div>

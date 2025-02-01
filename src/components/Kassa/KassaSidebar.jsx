@@ -92,6 +92,26 @@ const KassaSidebar = ({ active, setActive }) => {
                         handleOpen(0), setActive(!active);
                     }}
                     className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
+                        currenurl == "/refund"
+                            ? "bg-main-green text-white"
+                            : "text-main-green"
+                    }`}
+                >
+                    <Link
+                        to="/refund"
+                        className={`flex gap-2   justify-${
+                            sidebar ? "start" : "center"
+                        }`}
+                    >
+                        <FaCoins size={25} />
+                        {sidebar ? "Возврат" : ""}
+                    </Link>
+                </li>
+                <li
+                    onClick={() => {
+                        handleOpen(0), setActive(!active);
+                    }}
+                    className={`mb-2 px-3 py-3 rounded-xl rounded-ee-[40px]  ${
                         currenurl == "/history-payments"
                             ? "bg-main-green text-white"
                             : "text-main-green"

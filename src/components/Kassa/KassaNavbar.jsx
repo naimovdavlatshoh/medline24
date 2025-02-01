@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import KassaThemeToggle from "./KassaThemeToggle";
+import Logout from "../Logout";
 
 const KassaNavbar = ({ setTheme1 }) => {
     const [lang, setLang] = useState(localStorage.getItem("lang"));
@@ -37,6 +38,7 @@ const KassaNavbar = ({ setTheme1 }) => {
                 </div>
             </div>
             <KassaThemeToggle setTheme1={setTheme1} />
+            <Logout />
         </div>
     );
 };
